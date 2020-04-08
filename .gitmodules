@@ -1,0 +1,3 @@
+[submodule "esp32/externals/smooth"]
+	path = esp32/externals/smooth
+	url = https://github.com/PerMalmberg/Smooth.git
