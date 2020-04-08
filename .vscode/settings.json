@@ -102,5 +102,8 @@
         "**/node_modules/**": true,
         "**/build/**": true
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "files.exclude": {
+        "esp32/build": true
+    }
 }
