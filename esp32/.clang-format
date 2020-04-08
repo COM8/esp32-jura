@@ -1,0 +1,9 @@
+---
+BasedOnStyle: Google
+IndentWidth: '4'
+Language: Cpp
+SortIncludes: 'true'
+TabWidth: '4'
+UseTab: Never
+
+...
