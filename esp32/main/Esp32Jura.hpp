@@ -2,6 +2,8 @@
 
 #include <smooth/core/Application.h>
 
+#include "jura/CoffeeMakerTask.hpp"
+
 //---------------------------------------------------------------------------
 namespace esp32jura {
 //---------------------------------------------------------------------------
@@ -15,6 +17,8 @@ void app_main(void);
 //---------------------------------------------------------------------------
 class Esp32Jura : public smooth::core::Application {
    private:
+    jura::CoffeeMakerTask coffeeMaker;
+
    public:
     Esp32Jura();
 
