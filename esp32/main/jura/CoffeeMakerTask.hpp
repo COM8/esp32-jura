@@ -32,6 +32,8 @@ class CoffeeMakerTask : public smooth::core::Task {
    private:
     void uartWriteTest();
     void uartReadTest();
+    void writeToCoffeeMaker(std::string s);
+    void readFromCoffeeMaker();
 
     /**
      * Decodes the given four bytes read from the coffee maker into on byte.

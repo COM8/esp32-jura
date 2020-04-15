@@ -1,8 +1,11 @@
 #include "CoffeeMakerTask.hpp"
 
+#include <stdlib.h>
+
 #include <chrono>
 #include <iostream>
 #include <string>
+#include <thread>
 
 #include "smooth/core/task_priorities.h"
 
@@ -25,9 +28,9 @@ void CoffeeMakerTask::init() {
 
 void CoffeeMakerTask::tick() {
     std::cout << "Coffee maker tick...\n";
-    while (true) {
-        uartWriteTest();
-        uartReadTest();
+    writeToCoffeeMaker("FA:0B\r\n");
+    for (size_t i = 0; i < 7; i++) {
+        readFromCoffeeMaker();
     }
 }
 
@@ -92,9 +95,37 @@ std::array<uint8_t, 4> CoffeeMakerTask::encode(uint8_t decData) {
     return std::move(encData);
 }
 
-void CoffeeMakerTask::writeEncData(std::array<uint8_t, 4> encData) { uart_write_bytes(UART_PORT, reinterpret_cast<char*>(encData.data()), 4); }
+void CoffeeMakerTask::writeEncData(std::array<uint8_t, 4> encData) {
+    uart_write_bytes(UART_PORT, reinterpret_cast<char*>(encData.data()), 4);
+    std::this_thread::sleep_for(std::chrono::milliseconds{8});
+}
 
 std::array<uint8_t, 4> CoffeeMakerTask::readEncData() { return std::array<uint8_t, 4>{0, 0, 0, 0}; }
+
+void CoffeeMakerTask::writeToCoffeeMaker(std::string s) {
+    std::array<uint8_t, 4> data;
+    for (const char c : s) {
+        data = encode(static_cast<const uint8_t>(c));
+        writeEncData(data);
+    }
+}
+
+void CoffeeMakerTask::readFromCoffeeMaker() {
+    size_t size = 0;
+    ESP_ERROR_CHECK(uart_get_buffered_data_len(UART_PORT, &size));
+    if (size <= 4) {
+        return;
+    }
+
+    uint8_t buf[4];
+    int len = uart_read_bytes(UART_PORT, buf, 4, 100);
+    if (len < 0) {
+        std::cerr << "Failed to read from UART." << std::endl;
+        return;
+    }
+    std::cout << "Read: " << len << " bytes\n";
+    std::cout << "Read: " << static_cast<char>(decode(std::array<uint8_t, 4>{buf[0], buf[1], buf[2], buf[3]})) << "\n";
+}
 
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura
