@@ -5,5 +5,5 @@ Language: Cpp
 SortIncludes: 'true'
 TabWidth: '4'
 UseTab: Never
-
+ColumnLimit: 200
 ...
