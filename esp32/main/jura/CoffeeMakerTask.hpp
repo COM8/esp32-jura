@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <optional>
 
 #include "driver/gpio.h"
 #include "driver/uart.h"
@@ -30,10 +31,11 @@ class CoffeeMakerTask : public smooth::core::Task {
     void tick() override;
 
    private:
-    void uartWriteTest();
-    void uartReadTest();
     void writeToCoffeeMaker(std::string s);
     void readFromCoffeeMaker();
+
+    void testEncodeDecode();
+    void printByte(const uint8_t& b);
 
     /**
      * Decodes the given four bytes read from the coffee maker into on byte.
@@ -44,7 +46,7 @@ class CoffeeMakerTask : public smooth::core::Task {
      * Encodes the given byte into four bytes that the coffee maker understands.
      * Based on: http://protocoljura.wiki-site.com/index.php/Protocol_to_coffeemaker
      **/
-    std::array<uint8_t, 4> encode(uint8_t decData);
+    std::array<uint8_t, 4> encode(const uint8_t& decData);
     /**
      * Writes four bytes of data to the coffee maker and then waits 8ms.
      **/
@@ -52,7 +54,9 @@ class CoffeeMakerTask : public smooth::core::Task {
     /**
      * Reads four bytes of data from the coffee maker which represent one byte of actual data.
      **/
-    std::array<uint8_t, 4> readEncData();
+    std::optional<std::array<uint8_t, 4>> readEncData();
+
+    uint8_t reverse(uint8_t b);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura
