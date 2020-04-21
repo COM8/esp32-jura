@@ -46,7 +46,7 @@ class CoffeeMakerTask : public smooth::core::Task {
      * Encodes the given byte into four bytes that the coffee maker understands.
      * Based on: http://protocoljura.wiki-site.com/index.php/Protocol_to_coffeemaker
      **/
-    std::array<uint8_t, 4> encode(const uint8_t& decData);
+    std::array<uint8_t, 4> encode(uint8_t decData);
     /**
      * Writes four bytes of data to the coffee maker and then waits 8ms.
      **/

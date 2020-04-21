@@ -29,13 +29,13 @@ void CoffeeMakerTask::init() {
 
 void CoffeeMakerTask::tick() {
     std::cout << "Coffee maker tick...\n";
-    writeToCoffeeMaker("AN:01\r\n");
-    std::cout << "Read: ";
+    writeToCoffeeMaker("TY:\r\n");
+    std::cout << "-----Read:-----\n";
     for (size_t i = 0; i < 8; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds{8});
         readFromCoffeeMaker();
     }
-    std::cout << '\n';
+    std::cout << "----------\n";
 }
 
 uint8_t CoffeeMakerTask::decode(std::array<uint8_t, 4> encData) {
@@ -43,10 +43,6 @@ uint8_t CoffeeMakerTask::decode(std::array<uint8_t, 4> encData) {
     constexpr uint8_t B2_MASK = (0b10000000 >> 2);
     // Bit mask for the 5. bit from the left:
     constexpr uint8_t B5_MASK = (0b10000000 >> 5);
-
-    /*for (size_t i = 0; i < 4; i++) {
-        encData[i] = reverse(encData[i]);
-    }*/
 
     uint8_t decData = 0;
     decData |= (encData[0] & B2_MASK) << 2;
@@ -63,7 +59,7 @@ uint8_t CoffeeMakerTask::decode(std::array<uint8_t, 4> encData) {
     return decData;
 }
 
-std::array<uint8_t, 4> CoffeeMakerTask::encode(const uint8_t& decData) {
+std::array<uint8_t, 4> CoffeeMakerTask::encode(uint8_t decData) {
     // The base bit layout for all send bytes:
     constexpr uint8_t BASE = 0b01011011;
 
@@ -79,10 +75,6 @@ std::array<uint8_t, 4> CoffeeMakerTask::encode(const uint8_t& decData) {
 
     encData[3] = BASE | ((decData & 0b00000010) << 4);
     encData[3] |= ((decData & 0b00000001) << 2);
-
-    /*for (size_t i = 0; i < 4; i++) {
-        encData[i] = reverse(encData[i]);
-    }*/
 
     return std::move(encData);
 }
@@ -112,8 +104,8 @@ std::optional<std::array<uint8_t, 4>> CoffeeMakerTask::readEncData() {
 
 void CoffeeMakerTask::writeToCoffeeMaker(std::string s) {
     std::array<uint8_t, 4> data;
-    for (const char c : s) {
-        data = encode(static_cast<const uint8_t>(c));
+    for (char c : s) {
+        data = encode(static_cast<uint8_t>(c));
         writeEncData(data);
     }
 }
@@ -133,8 +125,8 @@ void CoffeeMakerTask::readFromCoffeeMaker() {
     if (!data) {
         return;
     }
-    std::cout << decode(*data) << ": ";
-    printByte(decode(*data));
+    std::cout << decode(*data);
+    // printByte(decode(*data));
 }
 
 void CoffeeMakerTask::testEncodeDecode() {
