@@ -30,12 +30,16 @@ void CoffeeMakerTask::init() {
 void CoffeeMakerTask::tick() {
     std::cout << "Coffee maker tick...\n";
     writeToCoffeeMaker("TY:\r\n");
-    std::cout << "-----Read:-----\n";
+    std::string s;
     for (size_t i = 0; i < 8; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds{8});
-        readFromCoffeeMaker();
+        s += readFromCoffeeMaker();
     }
-    std::cout << "----------\n";
+    if (!s.empty()) {
+        std::cout << "-----Read " << s.length() << " bytes-----\n";
+        std::cout << s;
+        std::cout << "\n----------\n";
+    }
 }
 
 uint8_t CoffeeMakerTask::decode(std::array<uint8_t, 4> encData) {
@@ -110,23 +114,35 @@ void CoffeeMakerTask::writeToCoffeeMaker(std::string s) {
     }
 }
 
-void CoffeeMakerTask::readFromCoffeeMaker() {
-    /*size_t size = 0;
+std::string CoffeeMakerTask::readFromCoffeeMaker() {
+    // Wait 8 ms for the next bunch of data to arrive:
+    std::this_thread::sleep_for(std::chrono::milliseconds{8});
+
+    // Check if data is available:
+    size_t size = 0;
     ESP_ERROR_CHECK(uart_get_buffered_data_len(UART_PORT, &size));
+    if (size <= 0) {
+        return "";
+    }
+
+    // If less then 4 bytes are availabel wait again and then try again:
     if (size < 4) {
         std::this_thread::sleep_for(std::chrono::milliseconds{8});
         ESP_ERROR_CHECK(uart_get_buffered_data_len(UART_PORT, &size));
-        if (size <= 0) {
-            return;
+        if (size < 4) {
+            std::cerr << "Invalid amount of UART data found (" << size << " byte) - flushing.\n";
+            uart_flush(UART_PORT);
+            return "";
         }
-    }*/
+        return readFromCoffeeMaker();
+    }
 
     std::optional<std::array<uint8_t, 4>> data = readEncData();
-    if (!data) {
-        return;
-    }
-    std::cout << decode(*data);
     // printByte(decode(*data));
+    if (!data) {
+        return "";
+    }
+    return std::string(1, static_cast<char>(decode(*data))) + readFromCoffeeMaker();
 }
 
 void CoffeeMakerTask::testEncodeDecode() {

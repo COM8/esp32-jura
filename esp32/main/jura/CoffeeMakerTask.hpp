@@ -18,6 +18,8 @@ class CoffeeMakerTask : public smooth::core::Task {
         .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .rx_flow_ctrl_thresh = 0,
+        .use_ref_tick = false,
     };
     static constexpr int BUF_SIZE = 1024;
     static constexpr uart_port_t UART_PORT = UART_NUM_1;
@@ -32,7 +34,7 @@ class CoffeeMakerTask : public smooth::core::Task {
 
    private:
     void writeToCoffeeMaker(std::string s);
-    void readFromCoffeeMaker();
+    std::string readFromCoffeeMaker();
 
     void testEncodeDecode();
     void printByte(const uint8_t& b);
