@@ -23,8 +23,8 @@ class CoffeeMakerTask : public smooth::core::Task {
     };
     static constexpr int BUF_SIZE = 1024;
     static constexpr uart_port_t UART_PORT = UART_NUM_1;
-    static constexpr gpio_num_t UART_TX = GPIO_NUM_4;
-    static constexpr gpio_num_t UART_RX = GPIO_NUM_5;
+    static constexpr gpio_num_t UART_TX = GPIO_NUM_14;
+    static constexpr gpio_num_t UART_RX = GPIO_NUM_27;
 
    public:
     CoffeeMakerTask();

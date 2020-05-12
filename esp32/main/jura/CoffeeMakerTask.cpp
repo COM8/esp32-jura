@@ -29,7 +29,7 @@ void CoffeeMakerTask::init() {
 
 void CoffeeMakerTask::tick() {
     std::cout << "Coffee maker tick...\n";
-    writeToCoffeeMaker("TY:\r\n");
+    // writeToCoffeeMaker("TY:\r\n");
     std::string s;
     for (size_t i = 0; i < 8; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds{8});
@@ -138,7 +138,7 @@ std::string CoffeeMakerTask::readFromCoffeeMaker() {
     }
 
     std::optional<std::array<uint8_t, 4>> data = readEncData();
-    // printByte(decode(*data));
+    printByte(decode(*data));
     if (!data) {
         return "";
     }
