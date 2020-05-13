@@ -12,13 +12,11 @@ void app_main(void) {
     espJura.start();
 }
 
-Esp32Jura::Esp32Jura()
-    : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(1)),
-      coffeeMaker() {}
+Esp32Jura::Esp32Jura() : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(1)), snooper() {}
 
 void Esp32Jura::init() {
     std::cout << "ESP32 Jura initializing...\n";
-    coffeeMaker.start();
+    snooper.start();
     std::cout << "ESP32 Jura initialized.\n";
 }
 

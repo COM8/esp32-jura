@@ -1,11 +1,6 @@
 #include "CoffeeMakerTask.hpp"
 
-#include <stdlib.h>
-
-#include <chrono>
 #include <iostream>
-#include <string>
-#include <thread>
 
 #include "smooth/core/task_priorities.h"
 
