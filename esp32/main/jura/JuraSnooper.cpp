@@ -14,6 +14,7 @@ JuraSnooper::JuraSnooper()
 
 void JuraSnooper::init() {
     std::cout << "Initializing JURA snooper...\n";
+    JuraConnection::run_encode_decode_test();
     conCoffeeMaker.init();
     conDongle.init();
     std::cout << "JURA snooper initialized.\n";

@@ -57,7 +57,7 @@ void JuraConnection::print_byte(const uint8_t& byte) {
     for (size_t i = 0; i < 8; i++) {
         std::cout << ((byte >> (7 - i)) & 0b00000001) << " ";
     }
-    printf("-> %d\t%02x\t%c\t|\t%d\t%02x\t%c\t|\t%d\t%02x\t%c", byte, byte, byte, reverse_1(byte), reverse_1(byte), reverse_1(byte), reverse_2(byte), reverse_2(byte), reverse_2(byte));
+    printf("-> %d\t%02x\t%c", byte, byte, byte);
 }
 
 void JuraConnection::print_bytes(const std::vector<uint8_t>& data) {
@@ -96,21 +96,27 @@ void JuraConnection::run_encode_decode_test() {
 }
 
 std::array<uint8_t, 4> JuraConnection::encode(const uint8_t& decData) {
+    // 1111 0000 -> 0000 1111:
+    uint8_t tmp = ((decData & 0xF0) >> 4) | ((decData & 0x0F) << 4);
+
+    // 1100 1100 -> 0011 0011:
+    tmp = ((tmp & 0xC0) >> 2) | ((tmp & 0x30) << 2) | ((tmp & 0x0C) >> 2) | ((tmp & 0x03) << 2);
+
     // The base bit layout for all send bytes:
     constexpr uint8_t BASE = 0b01011011;
 
     std::array<uint8_t, 4> encData;
-    encData[0] = BASE | ((decData & 0b10000000) >> 2);
-    encData[0] |= ((decData & 0b01000000) >> 4);
+    encData[0] = BASE | ((tmp & 0b10000000) >> 2);
+    encData[0] |= ((tmp & 0b01000000) >> 4);
 
-    encData[1] = BASE | (decData & 0b00100000);
-    encData[1] |= ((decData & 0b00010000) >> 2);
+    encData[1] = BASE | (tmp & 0b00100000);
+    encData[1] |= ((tmp & 0b00010000) >> 2);
 
-    encData[2] = BASE | ((decData & 0b00001000) << 2);
-    encData[2] |= (decData & 0b00000100);
+    encData[2] = BASE | ((tmp & 0b00001000) << 2);
+    encData[2] |= (tmp & 0b00000100);
 
-    encData[3] = BASE | ((decData & 0b00000010) << 4);
-    encData[3] |= ((decData & 0b00000001) << 2);
+    encData[3] = BASE | ((tmp & 0b00000010) << 4);
+    encData[3] |= ((tmp & 0b00000001) << 2);
 
     return std::move(encData);
 }
@@ -133,6 +139,12 @@ uint8_t JuraConnection::decode(const std::array<uint8_t, 4>& encData) {
 
     decData |= (encData[3] & B2_MASK) >> 4;
     decData |= (encData[3] & B5_MASK) >> 2;
+
+    // 1111 0000 -> 0000 1111:
+    decData = ((decData & 0xF0) >> 4) | ((decData & 0x0F) << 4);
+
+    // 1100 1100 -> 0011 0011:
+    decData = ((decData & 0xC0) >> 2) | ((decData & 0x30) << 2) | ((decData & 0x0C) >> 2) | ((decData & 0x03) << 2);
 
     return decData;
 }
