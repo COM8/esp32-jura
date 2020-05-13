@@ -1,8 +1,7 @@
 #include "JuraConnection.hpp"
 
-#include <stdlib.h>
-
 #include <chrono>
+#include <cstdio>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -58,6 +57,7 @@ void JuraConnection::print_byte(const uint8_t& byte) {
     for (size_t i = 0; i < 8; i++) {
         std::cout << ((byte >> (7 - i)) & 0b00000001) << " ";
     }
+    printf("-> %d\t%02x\t%c\t|\t%d\t%02x\t%c\t|\t%d\t%02x\t%c", byte, byte, byte, reverse_1(byte), reverse_1(byte), reverse_1(byte), reverse_2(byte), reverse_2(byte), reverse_2(byte));
 }
 
 void JuraConnection::print_bytes(const std::vector<uint8_t>& data) {
@@ -133,6 +133,7 @@ uint8_t JuraConnection::decode(const std::array<uint8_t, 4>& encData) {
 
     decData |= (encData[3] & B2_MASK) >> 4;
     decData |= (encData[3] & B5_MASK) >> 2;
+
     return decData;
 }
 
@@ -194,13 +195,19 @@ size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>* data) {
     return read_encoded(data);
 }
 
-uint8_t JuraConnection::reverse(const uint8_t& byte) {
-    uint8_t result;
-    result = (byte & 0xF0) >> 4 | (byte & 0x0F) << 4;
-    result = (byte & 0xCC) >> 2 | (byte & 0x33) << 2;
-    result = (byte & 0xAA) >> 1 | (byte & 0x55) << 1;
+uint8_t JuraConnection::reverse_1(const uint8_t& byte) {
+    uint8_t result = (byte & 0b1) << 7;
+    result |= (byte & 0b10) << 5;
+    result |= (byte & 0b100) << 3;
+    result |= (byte & 0b1000) << 1;
+    result |= (byte & 0b10000) >> 1;
+    result |= (byte & 0b100000) >> 3;
+    result |= (byte & 0b1000000) >> 5;
+    result |= (byte & 0b10000000) >> 7;
     return result;
 }
+
+uint8_t JuraConnection::reverse_2(const uint8_t& byte) { return ((byte & 0xF0) >> 4) | ((byte & 0x0F) << 4); }
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura
 //---------------------------------------------------------------------------

@@ -71,7 +71,12 @@ class JuraConnection {
      * Reverses the bitorder of the given byte.
      * For example: 01010101 -> 10101010
      **/
-    uint8_t reverse(const uint8_t& byte);
+    static uint8_t reverse_1(const uint8_t& byte);
+    /**
+     * Reverses the bitorder of the given byte.
+     * For example: 11110000 -> 00001111
+     **/
+    static uint8_t reverse_2(const uint8_t& byte);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura
