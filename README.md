@@ -1,32 +1,120 @@
 # esp32-jura
-ESP32 powered Jura coffee maker
+This project aims to control newer JURA coffee maker models with an ESP32.
+Therefore we need to understand how the protocol for controlling JURA coffee makers works.
+
+This work is based on the excellent work done by the people over at [Protocol JURA](http://protocoljura.wiki-site.com/index.php/Hauptseite).
+They were able to figure out the basic protocol used for communication with older JURA coffee makers.
+
+Since newer models do not use this old V1Protocol any more I started this project to understand the new one.
 
 ## Protocol
 
-### Notation
-```
-Original Binary -> dec1	hex1	char1	|	dec2	hex2	char2	|	dec3  hex3  char3
-```
-
-`dec1, hex1, char1` use the original data.  
-`dec2, hex2, char2` use the reverse_1 data (10101010 -> 01010101).
-`dec3, hex3, char3` use the reverse_2 data (11110000 -> 00001111).
-
 ### General
-All messages end with:
-```
-[... MESSAGE ...]
-0 1 1 1 0 0 0 0 -> 112	70	p	|	14	0e	SO	|	07  07  '\a'
-1 0 1 0 0 0 0 0 -> 160	a0	�	|	5	05	ENQ	|	10	0a	'\n'
-```
-Which should correspond to "\r\n" of the original protocol.
+There are several steps of obfuscation being done by the JURA coffee maker to prevent others from reading the bare protocol.
 
-### Initial Message
-The initial message of the dongle is always the same:
+#### Connecting to a JURA coffee maker
+To connect to a JURA coffee maker we are using a 5V UART signal with the following configuration:
+* **Baud Rate:** 9600
+* **Data Bits:** 8
+* **Parity:** Disabled
+* **Stop Bits:** 1
+* **Flow Control:** Hardware flow control disabled
+* **RX Flow Control Threshold:** 0
+
+#### Deobfuscating
+Once a connection has been established we can start sending and receiving data.  
+**But** all data send and received is obfuscated.
+The following description shows how to **deobfuscate** data received from the coffee maker.  
+To obfuscate data just follow the steps in reverse.
+
+**Step 0**
+The coffee maker always sends 4 "raw" byte per one byte of data with a break of 8ms in between each "raw" byte.
+This looks something like this:
 ```
-0 0 0 1 0 1 0 1 -> 21	15	NAK	|	168	a8	�	|	81	51	Q
-0 1 1 0 0 1 0 1 -> 101	65	e	|	166	a6	�	|	86	56	V
-1 0 1 0 1 1 0 0 -> 172	ac	�	|	53	35	5	|	202	ca	�
-0 1 1 1 0 0 0 0 -> 112	70	p	|	14	0e	SO	|	07  07  '\a'
-1 0 1 0 0 0 0 0 -> 160	a0	�	|	5	05	ENQ	|	10	0a	'\n'
+01011011 <8ms break> 01011111 <8ms break> 01011111 <8ms break> 01011111 <8ms break>
+01011111 <8ms break> 01111011 <8ms break> 01011111 <8ms break> 01011111 <8ms break>
+01111011 <8ms break> 01111011 <8ms break> 01111111 <8ms break> 01011011 <8ms break>
+01011111 <8ms break> 01111111 <8ms break> 01011011 <8ms break> 01011011 <8ms break>
+01111011 <8ms break> 01111011 <8ms break> 01011011 <8ms break> 01011011 <8ms break>
 ```
+Each line corresponds to one actual data byte.
+
+**Step 1**  
+Each of our 4 "raw" bytes (each line) contains only 2 bits of our resulting data bit.  
+Bit 2 and 5.  
+All other bits (except 0) are set to 1.
+
+```
+0b01011011
+    ^  ^
+  DB1  DB2
+```
+`DB1` and `DB2` are our actual data bits here.
+We have to combine alle 8 (of our 4 "raw" bytes) into a single data bit.
+
+Examples:
+```C++
+const std::array<uint8_t, 4> encData{0b01011011, 0b01011111, 0b01011111, 0b01011111};
+
+// Bit mask for the 2. bit from the left:
+constexpr uint8_t B2_MASK = (0b10000000 >> 2);
+
+// Bit mask for the 5. bit from the left:
+constexpr uint8_t B5_MASK = (0b10000000 >> 5);
+
+uint8_t decData = 0;
+decData |= (encData[0] & B2_MASK) << 2;
+decData |= (encData[0] & B5_MASK) << 4;
+decData |= (encData[1] & B2_MASK);
+decData |= (encData[1] & B5_MASK) << 2;
+decData |= (encData[2] & B2_MASK) >> 2;
+decData |= (encData[2] & B5_MASK);
+decData |= (encData[3] & B2_MASK) >> 4;
+decData |= (encData[3] & B5_MASK) >> 2; // 0b00010101
+```
+```
+
+
+Input            -> Output
+0 0 0 1  0 1 0 1 -> 0 1 0 1  0 0 0 1
+0 1 1 0  0 1 0 1 -> 0 1 0 1  0 1 1 0
+1 0 1 0  1 1 0 0 -> 1 1 0 0  1 0 1 0
+0 1 1 1  0 0 0 0 -> 0 0 0 0  0 1 1 1
+1 0 1 0  0 0 0 0 -> 0 0 0 0  1 0 1 0
+```
+
+**Step 2**  
+In this step we switch both nibbles (4 bit) of each byte.
+Examples:
+`1100 1100 -> 0011 0011`
+```C++
+uint8_t in = 0b00010101;
+uint8_t out = ((in & 0xF0) >> 4) | ((in & 0x0F) << 4); // 0b01010001
+```
+```
+Input                                                                               -> Output
+01011011 <8ms break> 01011111 <8ms break> 01011111 <8ms break> 01011111 <8ms break> -> 0 1 0 1  0 0 0 1
+01011111 <8ms break> 01111011 <8ms break> 01011111 <8ms break> 01011111 <8ms break> -> 0 1 0 1  0 1 1 0
+01111011 <8ms break> 01111011 <8ms break> 01111111 <8ms break> 01011011 <8ms break> -> 1 1 0 0  1 0 1 0
+01011111 <8ms break> 01111111 <8ms break> 01011011 <8ms break> 01011011 <8ms break> -> 0 0 0 0  0 1 1 1
+01111011 <8ms break> 01111011 <8ms break> 01011011 <8ms break> 01011011 <8ms break> -> 0 0 0 0  1 0 1 0
+```
+
+**Step 3**  
+A last time we have to shift all bits in our byte around.
+Here we have to split up our byte into two nibbles (4 bit) and switch two bits each.  
+Examples:
+`1100 1100 -> 0011 0011`
+```C++
+uint8_t in = 0b01010001;
+uint8_t out = ((in & 0xC0) >> 2) | ((in & 0x30) << 2) | ((in & 0x0C) >> 2) | ((in & 0x03) << 2); // 0b01010100
+```
+```
+Input            -> Output           -> Output_Hex Output_Dec Output_Char
+0 1 0 1  0 0 0 1 -> 0 1 0 1  0 1 0 0 -> 54	84	T 
+0 1 0 1  0 1 1 0 -> 0 1 0 1  1 0 0 1 -> 59	89	Y 
+1 1 0 0  1 0 1 0 -> 0 0 1 1  1 0 1 0 -> 3A	58	:
+0 0 0 0  0 1 1 1 -> 0 0 0 0  1 1 0 1 -> 0d	13	'\r'
+0 0 0 0  1 0 1 0 -> 0 0 0 0  1 0 1 0 -> 0a	10	'\n'
+```
+Which results in the message `TY:\r\n`.
