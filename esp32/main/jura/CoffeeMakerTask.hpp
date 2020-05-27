@@ -16,6 +16,8 @@ class CoffeeMakerTask : public smooth::core::Task {
     static constexpr gpio_num_t UART_TX = GPIO_NUM_14;
     static constexpr gpio_num_t UART_RX = GPIO_NUM_27;
 
+    bool on{true};
+
     JuraConnection connection;
 
    public:

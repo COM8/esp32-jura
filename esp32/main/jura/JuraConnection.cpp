@@ -53,6 +53,15 @@ bool JuraConnection::write_decoded(const std::vector<uint8_t>& data) {
     return true;
 }
 
+bool JuraConnection::write_decoded(const std::string& data) {
+    for (char c : data) {
+        if (!write_decoded(static_cast<uint8_t>(c))) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void JuraConnection::print_byte(const uint8_t& byte) {
     for (size_t i = 0; i < 8; i++) {
         std::cout << ((byte >> (7 - i)) & 0b00000001) << " ";

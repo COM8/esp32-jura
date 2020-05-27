@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::jura {
 //---------------------------------------------------------------------------
-CoffeeMakerTask::CoffeeMakerTask() : Task("Coffee Task", 0, 1, std::chrono::seconds(2), 1), connection(UART_PORT, UART_TX, UART_RX) {}
+CoffeeMakerTask::CoffeeMakerTask() : Task("Coffee Task", 0, 1, std::chrono::seconds(5), 1), connection(UART_PORT, UART_TX, UART_RX) {}
 
 void CoffeeMakerTask::init() {
     std::cout << "Initializing coffee maker...\n";
@@ -17,13 +17,21 @@ void CoffeeMakerTask::init() {
 
 void CoffeeMakerTask::tick() {
     std::cout << "Coffee maker tick...\n";
-    write();
+
+    connection.write_decoded("FA:04\r\n");
+    on = !on;
+
     read();
 }
 
-void CoffeeMakerTask::write() {}
+void CoffeeMakerTask::write() { connection.write_decoded("TY:\r\n"); }
 
-void CoffeeMakerTask::read() {}
+void CoffeeMakerTask::read() {
+    std::vector<uint8_t> buffer;
+    if (connection.read_decoded(&buffer)) {
+        connection.print_bytes(buffer);
+    }
+}
 
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura

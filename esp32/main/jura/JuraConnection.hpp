@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <string>
 #include <vector>
 
 #include "driver/gpio.h"
@@ -35,6 +36,7 @@ class JuraConnection {
 
     bool write_decoded(const uint8_t& byte);
     bool write_decoded(const std::vector<uint8_t>& data);
+    bool write_decoded(const std::string& data);
 
     static void print_byte(const uint8_t& byte);
     static void print_bytes(const std::vector<uint8_t>& data);

@@ -16,7 +16,8 @@ Esp32Jura::Esp32Jura() : Application(smooth::core::APPLICATION_BASE_PRIO, std::c
 
 void Esp32Jura::init() {
     std::cout << "ESP32 Jura initializing...\n";
-    snooper.start();
+    // snooper.start();
+    coffeeMaker.start();
     std::cout << "ESP32 Jura initialized.\n";
 }
 

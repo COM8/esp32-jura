@@ -2,7 +2,7 @@
 
 #include <smooth/core/Application.h>
 
-// #include "jura/CoffeeMakerTask.hpp"
+#include "jura/CoffeeMakerTask.hpp"
 #include "jura/JuraSnooper.hpp"
 
 //---------------------------------------------------------------------------
@@ -18,7 +18,7 @@ void app_main(void);
 //---------------------------------------------------------------------------
 class Esp32Jura : public smooth::core::Application {
    private:
-    // jura::CoffeeMakerTask coffeeMaker;
+    jura::CoffeeMakerTask coffeeMaker;
     jura::JuraSnooper snooper;
 
    public:
