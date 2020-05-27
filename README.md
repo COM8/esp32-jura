@@ -12,8 +12,8 @@ Since newer models do not use this old V1Protocol any more I started this projec
 ### General
 There are several steps of obfuscation being done by the JURA coffee maker to prevent others from reading the bare protocol.
 
-#### Connecting to a JURA coffee maker
-To connect to a JURA coffee maker we are using a 5V UART signal with the following configuration:
+#### Connecting to an JURA coffee maker
+To connect to an JURA coffee maker we are using a 5V UART signal with the following configuration:
 * **Baud Rate:** 9600
 * **Data Bits:** 8
 * **Parity:** Disabled
@@ -118,3 +118,19 @@ Input            -> Output           -> Output_Hex Output_Dec Output_Char
 0 0 0 0  1 0 1 0 -> 0 0 0 0  1 0 1 0 -> 0a	10	'\n'
 ```
 Which results in the message `TY:\r\n`.
+
+### Commands
+Every message/command send from or to the coffee maker has to end with `\r\n` to be valid.
+For simplicity reasons we omit the `\r\n` from all of the following messages and examples.
+
+#### Command Structure
+In general for every **valid** command a response will be send from the coffee maker.
+The actual command is always uppercase (e.g. `TY:`) and the response send back is lowercase (`ty:EF532M V02.03`).
+
+#### Available Commands
+The following list of commands has been tested on an `Jura E6 2019 platin (15326)`.
+
+| Name | Command | Response | Description |
+|----|----|----|----|
+| Type of Machine | `TY:` | `ty:` (e.g. `ty:EF532M V02.03`) | Returns the type of the machine. |
+| Make Product 4 | `FA:04` | `ok:` | Create a Cappuccino. |
