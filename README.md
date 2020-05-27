@@ -73,8 +73,6 @@ decData |= (encData[3] & B2_MASK) >> 4;
 decData |= (encData[3] & B5_MASK) >> 2; // 0b00010101
 ```
 ```
-
-
 Input            -> Output
 0 0 0 1  0 1 0 1 -> 0 1 0 1  0 0 0 1
 0 1 1 0  0 1 0 1 -> 0 1 0 1  0 1 1 0
