@@ -132,5 +132,66 @@ The following list of commands has been tested on an `Jura E6 2019 platin (15326
 
 | Name | Command | Response | Description |
 |----|----|----|----|
-| Type of Machine | `TY:` | `ty:` (e.g. `ty:EF532M V02.03`) | Returns the type of the machine. |
-| Make Product 4 | `FA:04` | `ok:` | Create a Cappuccino. |
+| UNKNOWN | `AN:01` | `ok:` | - |
+| Turn off | `AN:02` | `ok:` | Turns off the coffee maker. |
+| Erase EPROM | `AN:0A` | UNKNOWN | **Untested!** Erases the EPROM. Do not use. |
+| Test UCHI | `AN:0C` | `ok:` | Test the UCHI steam plate. |
+| Test Mode on | `AN:20` | `ok:` | Turns on the test mode. |
+| Test Mode off | `AN:21` | `ok:` | Turns off the test mode. |
+| UNKNOWN | `AN:40` | `an:40` | - |
+| UNKNOWN | `AN:AA` | `ok:` | - |
+| Get Type of Machine | `TY:` | `ty:` (e.g. `ty:EF532M V02.03`) | Returns the type of the machine. |
+| UNKNOWN | `FA:01` | `ok:` | - |
+| (Button 1) | `FA:04` | `ok:` | Simulates the button 1 press (left top). |
+| (Button 2) | `FA:05` | `ok:` | Simulates the button 2 press (left center). |
+| (Button 3) | `FA:06` | `ok:` | Simulates the button 3 press (left bottom). |
+| (Button 4) | `FA:07` | `ok:` | Simulates the button 4 press (right top). |
+| (Button 5) | `FA:08` | `ok:` | Simulates the button 5 press (right center). |
+| (Button 6) | `FA:09` | `ok:` | Simulates the button 6 press (right bottom). |
+| Coffee Pump on | `FN:01` | `ok:` | Turns on the coffee pump. |
+| Coffee Pump off | `FN:02` | `ok:` | Turns off the coffee pump. |
+| Coffee Heater on | `FN:03` | `ok:` | Turns on the coffee heater. |
+| Coffee Heater off | `FN:04` | `ok:` | Turns off the coffee heater. |
+| Grinder on | `FN:07` | `ok:` | Turns on the coffee grinder. |
+| Grinder off | `FN:08` | `ok:` | Turns off the coffee grinder. |
+| Coffee press on | `FN:09` | `ok:` | Turns on the coffee press. **Probably** |
+| Coffee press off | `FN:0A` | `ok:` | Turns off the coffee press. **Probably** |
+| **Something** on | `FN:0B` | `ok:` | Turns **something** on. |
+| **Something** off | `FN:0C` | `ok:` | Turns **something** on. |
+| Init Brew Group | `FN:0D` | `ok:` | Initializes the brew group. |
+| Brew Group to **unknown** Postion XYZ | `FN:0E` | `ok:` | Moves the brew group into an currently unknown position. |
+| Brew Group to **unknown** Postion XYZ | `FN:0F` | `ok:` | Moves the brew group into an currently unknown position. |
+| Brew Group to **unknown** Postion XYZ | `FN:13` | `ok:` | Moves the brew group into an currently unknown position. |
+| Brew Group to **unknown** Postion XYZ | `FN:13` | `ok:` | Moves the brew group into an currently unknown position. |
+| Brew Group to **unknown** Postion XYZ | `FN:1B` | `ok:` | Moves the brew group into an currently unknown position. |
+| Brew Group to **unknown** Postion XYZ | `FN:1C` | `ok:` | Moves the brew group into an currently unknown position. |
+| Brew Group **something** | `FN:22` | `ok:` | Some unknown operation with the brew group. |
+| UNKNOWN | `FN:24` | `ok:` | - |
+| UNKNOWN | `FN:25` | `ok:` | - |
+| UNKNOWN | `FN:26` | `ok:` | - |
+| UNKNOWN | `FN:27` | `ok:` | - |
+| UNKNOWN | `FN:44` | `ok:` | - |
+| UNKNOWN | `FN:45` | `ok:` | - |
+| UNKNOWN | `FN:50` | `ok:` | - |
+| Turn off | `FN:51` | `ok:` | Turns off the coffee maker. |
+| UNKNOWN | `FN:54` | `ok:` | - |
+| UNKNOWN | `FN:55` | `ok:` | - |
+| UNKNOWN | `FN:60` | `ok:` | - |
+| UNKNOWN | `FN:61` | `ok:` | - |
+| UNKNOWN | `FN:62` | `ok:` | - |
+| UNKNOWN | `FN:63` | `ok:` | - |
+| UNKNOWN | `FN:64` | `ok:` | - |
+| UNKNOWN | `FN:65` | `ok:` | - |
+| UNKNOWN | `FN:66` | `ok:` | - |
+| UNKNOWN | `FN:67` | `ok:` | - |
+| UNKNOWN | `FN:70` | `ok:` | - |
+| UNKNOWN | `FN:71` | `ok:` | - |
+| UNKNOWN | `FN:72` | `ok:` | - |
+| UNKNOWN | `FN:73` | `ok:` | - |
+| UNKNOWN | `FN:80` | `ok:` | - |
+| UNKNOWN | `FN:81` | `ok:` | - |
+| UNKNOWN | `FN:88` | `ok:` | - |
+| UNKNOWN | `FN:89` | `ok:` | - |
+| Debug mode on | `FN:8A` | `ku:`, `Ku:` pause `ku:`, `Ku:`, ... | Enables the debug mode. Sends continuously `ku:`, `Ku:`, ... Once an action like opening the hot water valve accrues, outputs information like percentage done. To disable it again disconnect the coffee maker from power.  |
+| UNKNOWN | `FN:90` | `ok:` | - |
+| UNKNOWN | `FN:99` | `ok:` | - |

@@ -1,5 +1,6 @@
 #include "CoffeeMakerTask.hpp"
 
+#include <iomanip>
 #include <iostream>
 
 #include "smooth/core/task_priorities.h"
@@ -7,7 +8,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::jura {
 //---------------------------------------------------------------------------
-CoffeeMakerTask::CoffeeMakerTask() : Task("Coffee Task", 0, 1, std::chrono::seconds(5), 1), connection(UART_PORT, UART_TX, UART_RX) {}
+CoffeeMakerTask::CoffeeMakerTask() : Task("Coffee Task", 0, 1, std::chrono::milliseconds(100), 1), connection(UART_PORT, UART_TX, UART_RX), button(BUTTON_SIGNAL) {}
 
 void CoffeeMakerTask::init() {
     std::cout << "Initializing coffee maker...\n";
@@ -16,11 +17,32 @@ void CoffeeMakerTask::init() {
 }
 
 void CoffeeMakerTask::tick() {
-    std::cout << "Coffee maker tick...\n";
+    // std::cout << "Coffee maker tick...\n";
 
-    connection.write_decoded("FA:04\r\n");
-    on = !on;
+    if (button.isPressed()) {
+        if (!buttonPressed) {
+            buttonPressed = true;
 
+            std::stringstream stream;
+            stream << std::setfill('0') << std::setw(2) << std::uppercase;
+            stream << std::hex << buttonCounter;
+            std::string msg = "RT:" + stream.str();
+            if (msg == "AN:0A") {
+                std::cout << "Skipping: " << msg << '\n';
+            } else {
+                std::cout << "Sending: " << msg << '\n';
+                msg += +"\r\n";
+                connection.write_decoded(msg);
+            }
+            ++buttonCounter;
+        }
+    } else {
+        buttonPressed = false;
+    }
+
+    read();
+    read();
+    read();
     read();
 }
 

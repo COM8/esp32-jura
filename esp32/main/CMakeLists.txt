@@ -4,7 +4,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(SOURCES Esp32Jura.cpp
             jura/CoffeeMakerTask.cpp
             jura/JuraSnooper.cpp
-            jura/JuraConnection.cpp)
+            jura/JuraConnection.cpp
+            sensor/Button.cpp)
 
 idf_component_register(SRCS ${SOURCES}
         INCLUDE_DIRS
