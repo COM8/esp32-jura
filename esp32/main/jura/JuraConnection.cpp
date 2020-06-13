@@ -217,19 +217,6 @@ size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>* data) {
     return read_encoded(data);
 }
 
-uint8_t JuraConnection::reverse_1(const uint8_t& byte) {
-    uint8_t result = (byte & 0b1) << 7;
-    result |= (byte & 0b10) << 5;
-    result |= (byte & 0b100) << 3;
-    result |= (byte & 0b1000) << 1;
-    result |= (byte & 0b10000) >> 1;
-    result |= (byte & 0b100000) >> 3;
-    result |= (byte & 0b1000000) >> 5;
-    result |= (byte & 0b10000000) >> 7;
-    return result;
-}
-
-uint8_t JuraConnection::reverse_2(const uint8_t& byte) { return ((byte & 0xF0) >> 4) | ((byte & 0x0F) << 4); }
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura
 //---------------------------------------------------------------------------
