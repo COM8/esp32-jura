@@ -67,12 +67,7 @@
         {
             "label": "Flash /dev/ttyUSB0",
             "type": "shell",
-            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py",
-            "args": [
-                "-p",
-                "/dev/ttyUSB0",
-                "flash"
-            ],
+            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py -p /dev/ttyUSB0 flash",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -91,10 +86,7 @@
         {
             "label": "Full Clean",
             "type": "shell",
-            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py",
-            "args": [
-                "fullclean"
-            ],
+            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py fullclean",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -113,10 +105,7 @@
         {
             "label": "Clean",
             "type": "shell",
-            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py",
-            "args": [
-                "clean"
-            ],
+            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py clean",
             "problemMatcher": [
                 "$gcc"
             ],
