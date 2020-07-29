@@ -18,6 +18,7 @@ void Esp32Jura::init() {
     std::cout << "ESP32 Jura initializing...\n";
     // snooper.start();
     coffeeMaker.start();
+    serialConnection.start();
     std::cout << "ESP32 Jura initialized.\n";
 }
 

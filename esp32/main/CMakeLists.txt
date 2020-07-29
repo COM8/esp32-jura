@@ -5,7 +5,8 @@ set(SOURCES Esp32Jura.cpp
             jura/CoffeeMakerTask.cpp
             jura/JuraSnooper.cpp
             jura/JuraConnection.cpp
-            sensor/Button.cpp)
+            sensor/Button.cpp
+            serial/SerialConnection.cpp)
 
 idf_component_register(SRCS ${SOURCES}
         INCLUDE_DIRS
