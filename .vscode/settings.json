@@ -1,8 +1,4 @@
 {
-    "clangTidy.systemIncludePath": [
-        "/home/fabian/Documents/ESP32/esp-idf/components/",
-        "/home/fabian/Documents/ESP32/esp-idf/components"
-    ],
     "cSpell.words": [
         "GPIO",
         "SSID",
@@ -105,5 +101,9 @@
     "cmake.configureOnOpen": false,
     "files.exclude": {
         "esp32/build": true
-    }
+    },
+    "clangd.arguments": [
+        "--compile-commands-dir ./esp32/build",
+        "--clang-tidy"
+    ]
 }

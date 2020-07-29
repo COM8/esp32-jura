@@ -32,5 +32,7 @@
 *.app
 
 # ESP32
-esp32/build/
+build/
+CMakeCache.txt
+CMakeFiles/
 

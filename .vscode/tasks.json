@@ -6,10 +6,7 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "idf.py",
-            "args": [
-                "build"
-            ],
+            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py build",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -32,7 +29,7 @@
         {
             "label": "Menuconfig - External",
             "type": "shell",
-            "command": "gnome-terminal -- bash -c 'idf.py menuconfig'",
+            "command": "gnome-terminal -- bash -c '. ~/Documents/ESP32/esp-idf/export.sh && idf.py menuconfig'",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -51,7 +48,7 @@
         {
             "label": "Monitor /dev/ttyUSB0 - External",
             "type": "shell",
-            "command": "gnome-terminal -- bash -c 'idf.py -p /dev/ttyUSB0 monitor'",
+            "command": "gnome-terminal -- bash -c '. ~/Documents/ESP32/esp-idf/export.sh && idf.py -p /dev/ttyUSB0 monitor'",
             "problemMatcher": [
                 "$gcc"
             ],
@@ -70,7 +67,7 @@
         {
             "label": "Flash /dev/ttyUSB0",
             "type": "shell",
-            "command": "idf.py",
+            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py",
             "args": [
                 "-p",
                 "/dev/ttyUSB0",
@@ -94,7 +91,7 @@
         {
             "label": "Full Clean",
             "type": "shell",
-            "command": "idf.py",
+            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py",
             "args": [
                 "fullclean"
             ],
@@ -116,7 +113,7 @@
         {
             "label": "Clean",
             "type": "shell",
-            "command": "idf.py",
+            "command": ". ~/Documents/ESP32/esp-idf/export.sh && idf.py",
             "args": [
                 "clean"
             ],
