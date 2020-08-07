@@ -4,7 +4,7 @@
 
 #include "jura/CoffeeMakerTask.hpp"
 #include "jura/JuraSnooper.hpp"
-#include "serial/SerialConnection.hpp"
+#include "serial/SerialConnectionTask.hpp"
 
 //---------------------------------------------------------------------------
 namespace esp32jura {
@@ -21,7 +21,7 @@ class Esp32Jura : public smooth::core::Application {
    private:
     jura::CoffeeMakerTask coffeeMaker;
     jura::JuraSnooper snooper;
-    serial::SerialConnection serialConnection;
+    serial::SerialConnectionTask serialConnection;
 
    public:
     Esp32Jura();

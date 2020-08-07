@@ -5,12 +5,11 @@
 
 #include "driver/gpio.h"
 #include "driver/uart.h"
-#include "smooth/core/Task.h"
 
 //---------------------------------------------------------------------------
 namespace esp32jura::serial {
 //---------------------------------------------------------------------------
-class SerialConnection : public smooth::core::Task {
+class SerialConnection {
    public:
     enum SerialConnectionState { SC_DISABLED = 0, SC_INIT = 1, SC_READY = 2, SC_ERROR = 3 };
 
@@ -38,20 +37,30 @@ class SerialConnection : public smooth::core::Task {
 
    public:
     SerialConnection();
+    void init();
 
-    void init() override;
-    void tick() override;
+    /**
+     * Tries to read from the serial connection.
+     * All read characters get get buffered until a new line character ('\n' or '\r') arrives.
+     * Returns an empty string if currenty no new line character arrived.
+     **/
+    std::string read();
+    /**
+     * Writes the given data buffer to the serial connection.
+     **/
+    size_t write(const std::vector<uint8_t>& data);
+    /**
+     * Writes the given string to the serial connection.
+     **/
+    size_t write(const std::string& data);
 
    private:
-    std::string read();
     /**
      * Reads a single byte from the uart buffer and appends it to the "read_buffer".
      * Returns true if the byte is a new line character ('\n').
      **/
     bool read_byte();
     bool data_available();
-    size_t write(const std::vector<uint8_t>& data);
-    size_t write(const std::string& data);
     static std::string vec_to_string(const std::vector<uint8_t>& data);
 };
 //---------------------------------------------------------------------------

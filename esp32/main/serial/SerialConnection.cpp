@@ -1,14 +1,13 @@
 #include "SerialConnection.hpp"
 
 #include <cassert>
+#include <iostream>
 #include <sstream>
-
-#include "smooth/core/task_priorities.h"
 
 //---------------------------------------------------------------------------
 namespace esp32jura::serial {
 //---------------------------------------------------------------------------
-SerialConnection::SerialConnection() : Task("Serial Task", 0, smooth::core::APPLICATION_BASE_PRIO, std::chrono::milliseconds(100), 1) { read_buffer.reserve(BUF_SIZE); }
+SerialConnection::SerialConnection() { read_buffer.reserve(BUF_SIZE); }
 
 void SerialConnection::init() {
     assert(state == SC_DISABLED || state == SC_ERROR);
@@ -18,15 +17,6 @@ void SerialConnection::init() {
     ESP_ERROR_CHECK(uart_driver_install(UART_PORT, BUF_SIZE * 2, 0, 0, nullptr, 0));
     std::cout << "Serial connection on port (Port: " << UART_PORT << " , TX: " << UART_TX << " , RX: " << UART_RX << ") has been initialized successfully.\n";
     state = SC_READY;
-}
-
-void SerialConnection::tick() {
-    assert(state == SC_READY);
-    std::string s = read();
-    if (!s.empty()) {
-        s = "Thanks: " + s + "\r\n";
-        write(s);
-    }
 }
 
 bool SerialConnection::read_byte() {
@@ -50,6 +40,7 @@ bool SerialConnection::data_available() {
 }
 
 std::string SerialConnection::read() {
+    assert(state == SC_READY);
     while (data_available()) {
         if (read_byte()) {
             std::string result = vec_to_string(read_buffer);
@@ -73,6 +64,7 @@ std::string SerialConnection::vec_to_string(const std::vector<uint8_t>& data) {
 }
 
 size_t SerialConnection::write(const std::vector<uint8_t>& data) {
+    assert(state == SC_READY);
     int count = uart_write_bytes(UART_PORT, reinterpret_cast<const char*>(data.data()), data.size());
     return static_cast<size_t>(count);
 }
