@@ -11,6 +11,7 @@
     "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",
     "editor.renderWhitespace": "all",
     "editor.renderIndentGuides": true,
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
