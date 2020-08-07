@@ -135,12 +135,12 @@ class JuraConnection {
      * Reads four bytes of encoded data which represent one byte of actual data.
      * Returns true on success.
      **/
-    bool read_encoded(std::array<uint8_t, 4> buffer);
+    bool read_encoded(std::array<uint8_t, 4>& buffer);
     /**
      * Reads multiples of four bytes. Every four bytes represent one actual byte.
      * Returns the number of 4 byte tuples read.
      **/
-    size_t read_encoded(std::vector<std::array<uint8_t, 4>> data);
+    size_t read_encoded(std::vector<std::array<uint8_t, 4>>& data);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura

@@ -165,7 +165,7 @@ bool JuraConnection::write_encoded(const std::array<uint8_t, 4>& encData) {
     return count > 0;
 }
 
-bool JuraConnection::read_encoded(std::array<uint8_t, 4> buffer) {
+bool JuraConnection::read_encoded(std::array<uint8_t, 4>& buffer) {
     size_t size = 0;
     ESP_ERROR_CHECK(uart_get_buffered_data_len(UART_PORT, &size));
     if (size < 4) {
@@ -181,7 +181,7 @@ bool JuraConnection::read_encoded(std::array<uint8_t, 4> buffer) {
     return true;
 }
 
-size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>> data) {
+size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>& data) {
     // Wait 8 ms for the next bunch of data to arrive:
     std::this_thread::sleep_for(std::chrono::milliseconds{8});
 
