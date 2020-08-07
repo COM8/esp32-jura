@@ -18,7 +18,14 @@ void CoffeeMakerTask::init() {
 
 void CoffeeMakerTask::tick() {
     // std::cout << "Coffee maker tick...\n";
+    write();
+    read();
+    read();
+    read();
+    read();
+}
 
+void CoffeeMakerTask::write() {
     if (button.isPressed()) {
         if (!buttonPressed) {
             buttonPressed = true;
@@ -26,7 +33,8 @@ void CoffeeMakerTask::tick() {
             std::stringstream stream;
             stream << std::setfill('0') << std::setw(2) << std::uppercase;
             stream << std::hex << buttonCounter;
-            std::string msg = "RT:" + stream.str();
+            // std::string msg = "RT:" + stream.str();
+            std::string msg = "TY:";
             if (msg == "AN:0A") {
                 std::cout << "Skipping: " << msg << '\n';
             } else {
@@ -39,14 +47,7 @@ void CoffeeMakerTask::tick() {
     } else {
         buttonPressed = false;
     }
-
-    read();
-    read();
-    read();
-    read();
 }
-
-void CoffeeMakerTask::write() { connection.write_decoded("TY:\r\n"); }
 
 void CoffeeMakerTask::read() {
     std::vector<uint8_t> buffer;
