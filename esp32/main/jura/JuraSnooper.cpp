@@ -27,35 +27,35 @@ void JuraSnooper::tick() {
     std::cout << "-------------------------Dongle:---------------------------\n";
 
     while (true) {
-        if (read_from_dongle(&buffer, inDongleReadMode)) {
+        if (read_from_dongle(buffer, inDongleReadMode)) {
             inDongleReadMode = true;
         }
 
-        if (read_from_coffee_maker(&buffer, inDongleReadMode)) {
+        if (read_from_coffee_maker(buffer, inDongleReadMode)) {
             inDongleReadMode = false;
         }
     }
 }
 
-bool JuraSnooper::read_from_coffee_maker(std::vector<uint8_t>* buffer, bool inDongleReadMode) {
-    buffer->clear();
+bool JuraSnooper::read_from_coffee_maker(std::vector<uint8_t>& buffer, bool inDongleReadMode) {
+    buffer.clear();
     if (conCoffeeMaker.read_decoded(buffer)) {
         if (inDongleReadMode) {
             std::cout << "-----------------------Coffee-Maker:-----------------------\n";
         }
-        conCoffeeMaker.print_bytes(*buffer);
+        conCoffeeMaker.print_bytes(buffer);
         return true;
     }
     return false;
 }
 
-bool JuraSnooper::read_from_dongle(std::vector<uint8_t>* buffer, bool inDongleReadMode) {
-    buffer->clear();
+bool JuraSnooper::read_from_dongle(std::vector<uint8_t>& buffer, bool inDongleReadMode) {
+    buffer.clear();
     if (conDongle.read_decoded(buffer)) {
         if (!inDongleReadMode) {
             std::cout << "-------------------------Dongle:---------------------------\n";
         }
-        conDongle.print_bytes(*buffer);
+        conDongle.print_bytes(buffer);
         return true;
     }
     return false;

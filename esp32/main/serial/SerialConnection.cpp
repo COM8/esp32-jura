@@ -33,6 +33,18 @@ bool SerialConnection::read_byte() {
     return true;
 }
 
+bool SerialConnection::read(std::vector<uint8_t>& data) {
+    assert(state == SC_READY);
+    while (data_available()) {
+        if (read_byte()) {
+            data.insert(data.end(), read_buffer.begin(), read_buffer.end());  // TODO(fabian): move semantics?!
+            read_buffer.clear();
+            return true;
+        }
+    }
+    return false;
+}
+
 bool SerialConnection::data_available() {
     size_t size = 0;
     ESP_ERROR_CHECK(uart_get_buffered_data_len(UART_PORT, &size));
@@ -40,13 +52,9 @@ bool SerialConnection::data_available() {
 }
 
 std::string SerialConnection::read() {
-    assert(state == SC_READY);
-    while (data_available()) {
-        if (read_byte()) {
-            std::string result = vec_to_string(read_buffer);
-            read_buffer.clear();
-            return result;
-        }
+    std::vector<uint8_t> data;
+    if (read(data)) {
+        return vec_to_string(data);
     }
     return "";
 }

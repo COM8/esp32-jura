@@ -21,23 +21,23 @@ void JuraConnection::init() {
 
 bool JuraConnection::read_decoded(uint8_t* byte) {
     std::array<uint8_t, 4> buffer;
-    if (!read_encoded(&buffer)) {
+    if (!read_encoded(buffer)) {
         return false;
     }
     *byte = decode(buffer);
     return true;
 }
 
-bool JuraConnection::read_decoded(std::vector<uint8_t>* data) {
+bool JuraConnection::read_decoded(std::vector<uint8_t>& data) {
     // Read encoded data:
     std::vector<std::array<uint8_t, 4>> dataBuffer;
-    if (read_encoded(&dataBuffer) <= 0) {
+    if (read_encoded(dataBuffer) <= 0) {
         return false;
     }
 
     // Decode all:
     for (const std::array<uint8_t, 4>& buffer : dataBuffer) {
-        data->push_back(decode(buffer));
+        data.push_back(decode(buffer));
     }
     return true;
 }
@@ -165,7 +165,7 @@ bool JuraConnection::write_encoded(const std::array<uint8_t, 4>& encData) {
     return count > 0;
 }
 
-bool JuraConnection::read_encoded(std::array<uint8_t, 4>* buffer) {
+bool JuraConnection::read_encoded(std::array<uint8_t, 4> buffer) {
     size_t size = 0;
     ESP_ERROR_CHECK(uart_get_buffered_data_len(UART_PORT, &size));
     if (size < 4) {
@@ -173,7 +173,7 @@ bool JuraConnection::read_encoded(std::array<uint8_t, 4>* buffer) {
     }
 
     // Wait 8ms for the data to arrive + 4ms for fail save reasons:
-    int len = uart_read_bytes(UART_PORT, buffer->data(), 4, (8 + 4) / portTICK_PERIOD_MS);
+    int len = uart_read_bytes(UART_PORT, buffer.data(), 4, (8 + 4) / portTICK_PERIOD_MS);
     if (len < 0) {
         std::cerr << "Failed to read from UART." << std::endl;
         return false;
@@ -181,7 +181,7 @@ bool JuraConnection::read_encoded(std::array<uint8_t, 4>* buffer) {
     return true;
 }
 
-size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>* data) {
+size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>> data) {
     // Wait 8 ms for the next bunch of data to arrive:
     std::this_thread::sleep_for(std::chrono::milliseconds{8});
 
@@ -189,7 +189,7 @@ size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>* data) {
     size_t size = 0;
     ESP_ERROR_CHECK(uart_get_buffered_data_len(UART_PORT, &size));
     if (size <= 0) {
-        return data->size();
+        return data.size();
     }
 
     // If less then 4 bytes are available wait again and then try again:
@@ -199,7 +199,7 @@ size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>* data) {
         if (size < 4) {
             std::cerr << "Invalid amount of UART data found (" << size << " byte) - flushing.\n";
             uart_flush(UART_PORT);
-            return data->size();
+            return data.size();
         }
         return read_encoded(data);
     }
@@ -207,10 +207,10 @@ size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>* data) {
     // Read all data available:
     for (size_t i = size; i >= 4; i -= 4) {
         std::array<uint8_t, 4> buffer;
-        if (!read_encoded(&buffer)) {
-            return data->size();
+        if (!read_encoded(buffer)) {
+            return data.size();
         }
-        data->push_back(std::move(buffer));
+        data.push_back(std::move(buffer));
     }
 
     // Try to read again to ensure there is no data available any more:

@@ -50,7 +50,7 @@ void CoffeeMakerTask::write() { connection.write_decoded("TY:\r\n"); }
 
 void CoffeeMakerTask::read() {
     std::vector<uint8_t> buffer;
-    if (connection.read_decoded(&buffer)) {
+    if (connection.read_decoded(buffer)) {
         connection.print_bytes(buffer);
     }
 }

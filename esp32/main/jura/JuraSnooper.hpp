@@ -30,8 +30,8 @@ class JuraSnooper : public smooth::core::Task {
     void tick() override;
 
    private:
-    bool read_from_coffee_maker(std::vector<uint8_t>* buffer, bool inDongleReadMode);
-    bool read_from_dongle(std::vector<uint8_t>* buffer, bool inDongleReadMode);
+    bool read_from_coffee_maker(std::vector<uint8_t>& buffer, bool inDongleReadMode);
+    bool read_from_dongle(std::vector<uint8_t>& buffer, bool inDongleReadMode);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura

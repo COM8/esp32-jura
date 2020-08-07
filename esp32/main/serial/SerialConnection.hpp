@@ -46,6 +46,10 @@ class SerialConnection {
      **/
     std::string read();
     /**
+     *
+     **/
+    bool read(std::vector<uint8_t>& data);
+    /**
      * Writes the given data buffer to the serial connection.
      **/
     size_t write(const std::vector<uint8_t>& data);
