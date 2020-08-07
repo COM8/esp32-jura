@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "jura/JuraConnection.hpp"
 #include "serial/SerialConnection.hpp"
 #include "smooth/core/Task.h"

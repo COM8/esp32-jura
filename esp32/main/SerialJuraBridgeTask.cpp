@@ -1,6 +1,8 @@
 #include "SerialJuraBridgeTask.hpp"
 
 #include <iostream>
+#include <string>
+#include <thread>
 #include <vector>
 
 #include "smooth/core/task_priorities.h"
@@ -30,9 +32,8 @@ void SerialJuraBridgeTask::tick() {
     }
 
     if (jura_connection.read_decoded(buffer) && buffer.size() > 0) {
-        std::cout << "[C->S]: Sending " << buffer.size() << " byte...\n";
+        // std::cout << "[C->S]: Received " << buffer.size() << " bytes" << std::endl;
         serial_connection.write(buffer);
-        std::cout << "[C->S]: Done.\n";
         buffer.clear();
     }
 }
