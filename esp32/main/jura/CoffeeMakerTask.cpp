@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::jura {
 //---------------------------------------------------------------------------
-CoffeeMakerTask::CoffeeMakerTask() : Task("Coffee Task", 0, 1, std::chrono::milliseconds(100), 1), connection(UART_PORT, UART_TX, UART_RX), button(BUTTON_SIGNAL) {}
+CoffeeMakerTask::CoffeeMakerTask() : Task("Coffee Task", 0, smooth::core::APPLICATION_BASE_PRIO, std::chrono::milliseconds(100), 1), connection(UART_PORT, UART_TX, UART_RX), button(BUTTON_SIGNAL) {}
 
 void CoffeeMakerTask::init() {
     std::cout << "Initializing coffee maker...\n";

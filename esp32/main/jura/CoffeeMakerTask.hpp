@@ -1,7 +1,5 @@
 #pragma once
 
-#include <array>
-
 #include "JuraConnection.hpp"
 #include "driver/gpio.h"
 #include "driver/uart.h"
