@@ -2,7 +2,7 @@
     "cSpell.words": [
         "GPIO",
         "SSID",
-        "espiot"
+        "esp32jura"
     ],
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,

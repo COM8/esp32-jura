@@ -36,3 +36,5 @@ build/
 CMakeCache.txt
 CMakeFiles/
 
+# C++ Utils
+esp32/components/cpp_utils/
