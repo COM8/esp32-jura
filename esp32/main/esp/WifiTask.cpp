@@ -13,9 +13,9 @@ namespace esp32jura::esp {
 //---------------------------------------------------------------------------
 using namespace smooth::core;
 //---------------------------------------------------------------------------
-WifiTask::WifiTask(std::shared_ptr<smooth::core::network::Wifi> wifi, std::shared_ptr<actuator::RgbLed> rgbLed, std::shared_ptr<esp::Storage> storage)
+WifiTask::WifiTask(smooth::core::network::Wifi* wifi, std::shared_ptr<actuator::RgbLed> rgbLed, std::shared_ptr<esp::Storage> storage)
     : Task("WIFI Task", 0, smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(1), 1),
-      wifi(std::move(wifi)),
+      wifi(wifi),
       rgbLed(std::move(rgbLed)),
       storage(std::move(storage)),
       net_status(NetworkStatusQueue::create(2, *this, *this)) {}

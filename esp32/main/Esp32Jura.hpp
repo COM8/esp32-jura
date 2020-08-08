@@ -25,6 +25,8 @@
 #include "esp/serial/SerialConnectionTask.hpp"
 #endif  // MODE_SERIAL
 #ifdef MODE_XMPP
+#include "esp/WifiTask.hpp"
+#include "esp/actuator/RgbLed.hpp"
 #include "xmpp/XmppTask.hpp"
 #endif  // MODE_XMPP
 
@@ -41,23 +43,25 @@ void app_main(void);
 //---------------------------------------------------------------------------
 class Esp32Jura : public smooth::core::Application {
    private:
+    std::shared_ptr<esp::Storage> storage{};
+
 #ifdef MODE_SNOOPER
-    jura::JuraSnooperTask snooper;
+    jura::JuraSnooperTask snooper{};
 #endif  // MODE_SNOOPER
 #ifdef MODE_COFFEE_MAKER
-    jura::CoffeeMakerTask coffeeMaker;
+    jura::CoffeeMakerTask coffeeMaker{};
 #endif  // MODE_COFFEE_MAKER
 #ifdef MODE_BRIDGE
-    utils::SerialJuraBridgeTask bridge;
+    utils::SerialJuraBridgeTask bridge{};
 #endif  // MODE_BRIDGE
 #ifdef MODE_SERIAL
-    serial::SerialConnectionTask serialConnection;
+    serial::SerialConnectionTask serialConnection{};
 #endif  // MODE_SERIAL
 #ifdef MODE_XMPP
-    xmpp::XmppTask xmpp;
+    std::shared_ptr<esp::actuator::RgbLed> rgbLed{};
+    std::unique_ptr<xmpp::XmppTask> xmpp{};
+    std::shared_ptr<esp::WifiTask> wifiTask{};
 #endif  // MODE_XMPP
-
-    std::shared_ptr<esp::Storage> storage{};
 
    public:
     Esp32Jura();

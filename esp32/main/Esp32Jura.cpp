@@ -12,13 +12,12 @@ void app_main(void) {
     espJura.start();
 }
 
-Esp32Jura::Esp32Jura()
-    : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(60))
+Esp32Jura::Esp32Jura() : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(60)) {
 #ifdef MODE_XMPP
-      ,
-      xmpp(storage)
+    rgbLed = std::make_shared<esp::actuator::RgbLed>(GPIO_NUM_27, GPIO_NUM_26, GPIO_NUM_25);
+    xmpp = std::make_unique<xmpp::XmppTask>(storage);
+    wifiTask = std::make_shared<esp::WifiTask>(&get_wifi(), rgbLed, storage);
 #endif  // MODE_XMPP
-{
 }
 
 void Esp32Jura::init() {
@@ -36,7 +35,7 @@ void Esp32Jura::init() {
     serialConnection.start();
 #endif  // MODE_SERIAL
 #ifdef MODE_XMPP
-    xmpp.start();
+    xmpp->start();
 #endif  // MODE_XMPP
     std::cout << "ESP32 Jura initialized.\n";
 }

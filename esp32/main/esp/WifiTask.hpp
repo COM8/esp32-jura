@@ -17,7 +17,7 @@ namespace esp32jura::esp {
 //---------------------------------------------------------------------------
 class WifiTask : public smooth::core::Task, public smooth::core::ipc::IEventListener<smooth::core::network::NetworkStatus> {
    private:
-    std::shared_ptr<smooth::core::network::Wifi> wifi;
+    smooth::core::network::Wifi* wifi;
     std::shared_ptr<actuator::RgbLed> rgbLed;
     std::shared_ptr<esp::Storage> storage;
 
@@ -25,7 +25,7 @@ class WifiTask : public smooth::core::Task, public smooth::core::ipc::IEventList
     std::shared_ptr<NetworkStatusQueue> net_status;
 
    public:
-    WifiTask(std::shared_ptr<smooth::core::network::Wifi> wifi, std::shared_ptr<actuator::RgbLed> rgbLed, std::shared_ptr<esp::Storage> storage);
+    WifiTask(smooth::core::network::Wifi* wifi, std::shared_ptr<actuator::RgbLed> rgbLed, std::shared_ptr<esp::Storage> storage);
 
     void init() override;
 
