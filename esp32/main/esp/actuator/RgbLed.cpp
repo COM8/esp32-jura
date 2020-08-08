@@ -1,7 +1,7 @@
 #include "RgbLed.hpp"
 
 //---------------------------------------------------------------------------
-namespace esp32jura::esp::actuators {
+namespace esp32jura::esp::actuator {
 //---------------------------------------------------------------------------
 RgbLed::RgbLed(gpio_num_t r, gpio_num_t g, gpio_num_t b) : r(r, false, false, false), g(g, false, false, false), b(b, false, false, false) {}
 
@@ -21,5 +21,5 @@ void RgbLed::turnOn(smooth::core::io::Output& led) { led.set(true); }
 
 void RgbLed::turnOff(smooth::core::io::Output& led) { led.set(false); }
 //---------------------------------------------------------------------------
-}  // namespace esp32jura::esp::actuators
+}  // namespace esp32jura::esp::actuator
    //---------------------------------------------------------------------------
