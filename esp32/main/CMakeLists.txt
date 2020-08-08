@@ -23,7 +23,24 @@ set(SOURCES Esp32Jura.cpp
             esp/actuator/RgbLed.cpp
             
             esp/serial/SerialConnection.cpp
-            esp/serial/SerialConnectionTask.cpp)
+            esp/serial/SerialConnectionTask.cpp
+            
+            xmpp/XmppClient.cpp
+            xmpp/XmppConnection.cpp
+            xmpp/XmppAccount.cpp
+            xmpp/XmppTask.cpp
+            xmpp/XmppUtils.cpp
+
+            xmpp/tcp/TcpConnection.cpp
+            xmpp/tcp/XmppProtocol.cpp
+            xmpp/tcp/XmppPacket.cpp
+            
+            xmpp/messages/MessageParser.cpp
+            xmpp/messages/Message.cpp
+            
+            xmpp/crypto/CryptoUtils.cpp
+            
+            xmpp/helpers/PubSubHelper.cpp)
 
 idf_component_register(SRCS ${SOURCES}
                        INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR} $ENV{IDF_PATH}/components
