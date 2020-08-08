@@ -66,15 +66,16 @@ void JuraConnection::print_byte(const uint8_t& byte) {
     for (size_t i = 0; i < 8; i++) {
         std::cout << ((byte >> (7 - i)) & 0b00000001) << " ";
     }
-    printf("-> %d\t%02x\t%c", byte, byte, byte);
+    // printf("-> %d\t%02x\t%c", byte, byte, byte);
+    printf("-> %d\t%02x", byte, byte);
 }
 
 void JuraConnection::print_bytes(const std::vector<uint8_t>& data) {
     for (const uint8_t& byte : data) {
-        // print_byte(byte);
-        printf("%c", byte);
+        print_byte(byte);
+        std::cout << "\r\n";
     }
-    // std::cout << "\n";
+    std::cout << "\r\n";
 }
 
 void JuraConnection::run_encode_decode_test() {
