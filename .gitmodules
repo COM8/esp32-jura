@@ -1,3 +1,6 @@
 [submodule "esp32/externals/smooth"]
 	path = esp32/externals/smooth
 	url = https://github.com/PerMalmberg/Smooth.git
+[submodule "esp32/main/xmpp/tinyxml2"]
+	path = esp32/main/xmpp/tinyxml2
+	url = https://github.com/leethomason/tinyxml2.git
