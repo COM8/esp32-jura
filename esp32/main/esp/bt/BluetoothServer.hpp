@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 #include "BLE2902.h"
@@ -17,8 +18,8 @@ namespace esp32jura::esp::bt {
 //---------------------------------------------------------------------------
 class BluetoothServer : public BLECharacteristicCallbacks, public BLEServerCallbacks {
    private:
-    actuator::RgbLed& rgbLed;
-    Storage& storage;
+    std::shared_ptr<actuator::RgbLed> rgbLed;
+    std::shared_ptr<Storage> storage;
     bool running;
 
     BLEServer* server;
@@ -28,7 +29,7 @@ class BluetoothServer : public BLECharacteristicCallbacks, public BLEServerCallb
     BluetoothServerCallback* serverCallback;
 
    public:
-    BluetoothServer(actuator::RgbLed& rgbLed, Storage& storage);
+    BluetoothServer(std::shared_ptr<actuator::RgbLed> rgbLed, std::shared_ptr<Storage> storage);
     ~BluetoothServer() = default;
 
     bool isRunning();

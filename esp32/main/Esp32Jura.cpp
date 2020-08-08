@@ -12,7 +12,14 @@ void app_main(void) {
     espJura.start();
 }
 
-Esp32Jura::Esp32Jura() : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(60)) {}
+Esp32Jura::Esp32Jura()
+    : Application(smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(60))
+#ifdef MODE_XMPP
+      ,
+      xmpp(storage)
+#endif  // MODE_XMPP
+{
+}
 
 void Esp32Jura::init() {
     std::cout << "ESP32 Jura initializing...\n";
@@ -28,6 +35,9 @@ void Esp32Jura::init() {
 #ifdef MODE_SERIAL
     serialConnection.start();
 #endif  // MODE_SERIAL
+#ifdef MODE_XMPP
+    xmpp.start();
+#endif  // MODE_XMPP
     std::cout << "ESP32 Jura initialized.\n";
 }
 

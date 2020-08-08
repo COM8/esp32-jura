@@ -12,6 +12,7 @@ set(SOURCES Esp32Jura.cpp
             jura/JuraConnection.cpp
 
             esp/Storage.cpp
+            esp/WifiTask.cpp
 
             esp/bt/BluetoothServer.cpp
             esp/bt/BLECharacteristicRWCallback.cpp

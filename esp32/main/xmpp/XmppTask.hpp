@@ -25,7 +25,7 @@ class XmppTask : public smooth::core::Task,
     using NetworkStatusQueue = smooth::core::ipc::SubscribingTaskEventQueue<smooth::core::network::NetworkStatus>;
     std::shared_ptr<NetworkStatusQueue> net_status;
 
-    esp::Storage& storage;
+    std::shared_ptr<esp::Storage> storage;
 
     std::shared_ptr<xmpp::XmppClient> client;
     std::unique_ptr<helpers::PubSubHelper> pubSubHelper;
@@ -37,7 +37,7 @@ class XmppTask : public smooth::core::Task,
     void handlePubSubEventMessage(const tinyxml2::XMLElement* elem);
 
    public:
-    XmppTask(esp::Storage& storage);
+    XmppTask(std::shared_ptr<esp::Storage> storage);
     ~XmppTask();
 
     void init() override;

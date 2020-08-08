@@ -7,7 +7,6 @@
 #include <iostream>
 #include <string>
 
-#include "../esp/Storage.hpp"
 #include "xmpp/Jid.hpp"
 #include "xmpp/XmppAccount.hpp"
 #include "xmpp/XmppCredentials.hpp"
@@ -19,10 +18,10 @@ using namespace smooth::core;
 //---------------------------------------------------------------------------
 const std::string XmppTask::INITIAL_HELLO_MESSAGE = "Hi from the ESP32. Please mirror this message!";
 
-XmppTask::XmppTask(esp::Storage& storage)
+XmppTask::XmppTask(std::shared_ptr<esp::Storage> storage)
     : Task("XMPP Task", 4096, smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(3), 1),
       net_status(NetworkStatusQueue::create(2, *this, *this)),
-      storage(storage),
+      storage(std::move(storage)),
       client(nullptr),
       pubSubHelper(nullptr) {}
 
@@ -33,9 +32,9 @@ XmppTask::~XmppTask() {
 }
 
 void XmppTask::init() {
-    std::string jidString = storage.readString(esp::Storage::JID);
+    std::string jidString = storage->readString(esp::Storage::JID);
     xmpp::Jid jid = xmpp::Jid::fromFullJid(jidString);
-    std::string password = storage.readString(esp::Storage::JID_PASSWORD);
+    std::string password = storage->readString(esp::Storage::JID_PASSWORD);
     xmpp::XmppAccount account(std::move(jid), std::move(password), std::make_shared<smooth::core::network::IPv4>(SERVER_IP, SERVER_PORT));
     client = std::make_unique<xmpp::XmppClient>(std::move(account), *this, *this);
     client->subscribeToMessagesListener(this);
@@ -84,9 +83,9 @@ void XmppTask::handlePresenceMessages(const tinyxml2::XMLElement* elem) {
 void XmppTask::handleMessageMessages(const tinyxml2::XMLElement* elem) {
     const tinyxml2::XMLElement* tmp = elem->FirstChildElement("body");
     if (tmp) {
-        if (!storage.readBool(esp::Storage::SETUP_DONE)) {
+        if (!storage->readBool(esp::Storage::SETUP_DONE)) {
             if (!strcmp(INITIAL_HELLO_MESSAGE.c_str(), tmp->GetText())) {
-                std::string to = storage.readString(esp::Storage::JID_SENDER);
+                std::string to = storage->readString(esp::Storage::JID_SENDER);
 
                 // Add to roster:
                 client->addToRoster(to);
@@ -94,7 +93,7 @@ void XmppTask::handleMessageMessages(const tinyxml2::XMLElement* elem) {
                 // Send setup done message:
                 std::string body = "Setup done!";
                 client->sendMessage(to, body);
-                storage.writeBool(esp::Storage::SETUP_DONE, true);
+                storage->writeBool(esp::Storage::SETUP_DONE, true);
                 std::cout << "Setup done!\n";
                 onReady();
             }
@@ -144,8 +143,8 @@ void XmppTask::handleIoTMessageMessage(const char* msg) {
 
 void XmppTask::event(const XmppClientConnectionState& event) {
     if (event == CLIENT_CONNECTED) {
-        if (!storage.readBool(esp::Storage::SETUP_DONE)) {
-            std::string to = storage.readString(esp::Storage::JID_SENDER);
+        if (!storage->readBool(esp::Storage::SETUP_DONE)) {
+            std::string to = storage->readString(esp::Storage::JID_SENDER);
             client->sendMessage(to, INITIAL_HELLO_MESSAGE);
         } else {
             onReady();

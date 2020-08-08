@@ -10,6 +10,7 @@
     ],
     "settings": {
         "files.associations": {
+            "*.pyx": "python",
             "*.txt": "plaintext",
             "*.ipp": "cpp",
             "string": "cpp",
@@ -88,7 +89,11 @@
             "variant": "cpp",
             "system_api.c": "cpp",
             "*.inc": "cpp",
-            "format": "cpp"
+            "format": "cpp",
+            "compare": "cpp",
+            "concepts": "cpp",
+            "ranges": "cpp",
+            "stop_token": "cpp"
         },
         "clangd.arguments": [
             "--compile-commands-dir ./esp32/build",
