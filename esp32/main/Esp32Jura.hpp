@@ -2,10 +2,10 @@
 
 #include <smooth/core/Application.h>
 
-#include "SerialJuraBridgeTask.hpp"
+#include "esp/serial/SerialConnectionTask.hpp"
 #include "jura/CoffeeMakerTask.hpp"
-#include "jura/JuraSnooper.hpp"
-#include "serial/SerialConnectionTask.hpp"
+#include "jura/JuraSnooperTask.hpp"
+#include "utils/SerialJuraBridgeTask.hpp"
 
 // #define MODE_SNOOPER
 // #define MODE_COFFEE_MAKER
@@ -26,13 +26,13 @@ void app_main(void);
 class Esp32Jura : public smooth::core::Application {
    private:
 #ifdef MODE_SNOOPER
-    jura::JuraSnooper snooper;
+    jura::JuraSnooperTask snooper;
 #endif  // MODE_SNOOPER
 #ifdef MODE_COFFEE_MAKER
     jura::CoffeeMakerTask coffeeMaker;
 #endif  // MODE_COFFEE_MAKER
 #ifdef MODE_BRIDGE
-    SerialJuraBridgeTask bridge;
+    utils::SerialJuraBridgeTask bridge;
 #endif  // MODE_BRIDGE
 #ifdef MODE_SERIAL
     serial::SerialConnectionTask serialConnection;

@@ -10,7 +10,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::jura {
 //---------------------------------------------------------------------------
-class JuraSnooper : public smooth::core::Task {
+class JuraSnooperTask : public smooth::core::Task {
    private:
     static constexpr uart_port_t UART_PORT_COFFEE_MAKER = UART_NUM_1;
     static constexpr gpio_num_t UART_TX_COFFEE_MAKER = GPIO_NUM_23;
@@ -24,7 +24,7 @@ class JuraSnooper : public smooth::core::Task {
     JuraConnection conDongle;
 
    public:
-    JuraSnooper();
+    JuraSnooperTask();
 
     void init() override;
     void tick() override;

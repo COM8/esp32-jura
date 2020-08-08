@@ -5,7 +5,7 @@
 #include <sstream>
 
 //---------------------------------------------------------------------------
-namespace esp32jura::serial {
+namespace esp32jura::esp::serial {
 //---------------------------------------------------------------------------
 SerialConnection::SerialConnection() { read_buffer.reserve(BUF_SIZE); }
 
@@ -80,5 +80,5 @@ size_t SerialConnection::write(const std::vector<uint8_t>& data) {
 size_t SerialConnection::write(const std::string& data) { return write(std::vector<uint8_t>(data.begin(), data.end())); }
 
 //---------------------------------------------------------------------------
-}  // namespace esp32jura::serial
+}  // namespace esp32jura::esp::serial
 //---------------------------------------------------------------------------

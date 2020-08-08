@@ -1,4 +1,4 @@
-#include "JuraSnooper.hpp"
+#include "JuraSnooperTask.hpp"
 
 #include <iostream>
 
@@ -7,12 +7,12 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::jura {
 //---------------------------------------------------------------------------
-JuraSnooper::JuraSnooper()
+JuraSnooperTask::JuraSnooperTask()
     : Task("Coffee Task", 0, 1, std::chrono::seconds(2), 1),
       conCoffeeMaker(UART_PORT_COFFEE_MAKER, UART_TX_COFFEE_MAKER, UART_RX_COFFEE_MAKER),
       conDongle(UART_PORT_DONGLE, UART_TX_DONGLE, UART_RX_DONGLE) {}
 
-void JuraSnooper::init() {
+void JuraSnooperTask::init() {
     std::cout << "Initializing JURA snooper...\n";
     JuraConnection::run_encode_decode_test();
     conCoffeeMaker.init();
@@ -20,7 +20,7 @@ void JuraSnooper::init() {
     std::cout << "JURA snooper initialized.\n";
 }
 
-void JuraSnooper::tick() {
+void JuraSnooperTask::tick() {
     std::vector<uint8_t> buffer;
     // Start in dongle read mode since usually the dongle starts the connection:
     bool inDongleReadMode = true;
@@ -37,7 +37,7 @@ void JuraSnooper::tick() {
     }
 }
 
-bool JuraSnooper::read_from_coffee_maker(std::vector<uint8_t>& buffer, bool inDongleReadMode) {
+bool JuraSnooperTask::read_from_coffee_maker(std::vector<uint8_t>& buffer, bool inDongleReadMode) {
     buffer.clear();
     if (conCoffeeMaker.read_decoded(buffer)) {
         if (inDongleReadMode) {
@@ -49,7 +49,7 @@ bool JuraSnooper::read_from_coffee_maker(std::vector<uint8_t>& buffer, bool inDo
     return false;
 }
 
-bool JuraSnooper::read_from_dongle(std::vector<uint8_t>& buffer, bool inDongleReadMode) {
+bool JuraSnooperTask::read_from_dongle(std::vector<uint8_t>& buffer, bool inDongleReadMode) {
     buffer.clear();
     if (conDongle.read_decoded(buffer)) {
         if (!inDongleReadMode) {

@@ -1,20 +1,11 @@
-#pragma once
-
-#include <smooth/core/io/Input.h>
-
-#include "driver/gpio.h"
+#include "Button.hpp"
 
 //---------------------------------------------------------------------------
-namespace esp32jura::sensor {
+namespace esp32jura::esp::sensor {
 //---------------------------------------------------------------------------
-class Button {
-   public:
-    smooth::core::io::Input signal;
+Button::Button(gpio_num_t signal) : signal(signal, true, false) {}
 
-    explicit Button(gpio_num_t signal);
-
-    bool isPressed();
-};
+bool Button::isPressed() { return not signal.read(); }
 //---------------------------------------------------------------------------
-}  // namespace esp32jura::sensor
+}  // namespace esp32jura::esp::sensor
    //---------------------------------------------------------------------------

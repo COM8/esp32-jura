@@ -7,7 +7,7 @@
 #include "driver/uart.h"
 
 //---------------------------------------------------------------------------
-namespace esp32jura::serial {
+namespace esp32jura::esp::serial {
 //---------------------------------------------------------------------------
 class SerialConnection {
    public:
@@ -68,5 +68,5 @@ class SerialConnection {
     static std::string vec_to_string(const std::vector<uint8_t>& data);
 };
 //---------------------------------------------------------------------------
-}  // namespace esp32jura::serial
+}  // namespace esp32jura::esp::serial
 //---------------------------------------------------------------------------

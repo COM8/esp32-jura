@@ -1,15 +1,15 @@
 #pragma once
 
+#include "esp/serial/SerialConnection.hpp"
 #include "jura/JuraConnection.hpp"
-#include "serial/SerialConnection.hpp"
 #include "smooth/core/Task.h"
 
 //---------------------------------------------------------------------------
-namespace esp32jura {
+namespace esp32jura::utils {
 //---------------------------------------------------------------------------
 class SerialJuraBridgeTask : public smooth::core::Task {
    private:
-    serial::SerialConnection serial_connection;
+    esp::serial::SerialConnection serial_connection;
 
     static constexpr uart_port_t UART_PORT = UART_NUM_1;
     static constexpr gpio_num_t UART_TX = GPIO_NUM_14;
@@ -23,5 +23,5 @@ class SerialJuraBridgeTask : public smooth::core::Task {
     void tick() override;
 };
 //---------------------------------------------------------------------------
-}  // namespace esp32jura
+}  // namespace esp32jura::utils
 //---------------------------------------------------------------------------

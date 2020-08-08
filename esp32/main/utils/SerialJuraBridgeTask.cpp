@@ -8,7 +8,7 @@
 #include "smooth/core/task_priorities.h"
 
 //---------------------------------------------------------------------------
-namespace esp32jura {
+namespace esp32jura::utils {
 //---------------------------------------------------------------------------
 SerialJuraBridgeTask::SerialJuraBridgeTask() : Task("Bridge Task", 0, smooth::core::APPLICATION_BASE_PRIO, std::chrono::milliseconds(100), 1), jura_connection(UART_PORT, UART_TX, UART_RX) {}
 
@@ -38,5 +38,5 @@ void SerialJuraBridgeTask::tick() {
     }
 }
 //---------------------------------------------------------------------------
-}  // namespace esp32jura
+}  // namespace esp32jura::utils
 //---------------------------------------------------------------------------

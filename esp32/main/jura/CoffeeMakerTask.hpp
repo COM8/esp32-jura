@@ -3,7 +3,7 @@
 #include "JuraConnection.hpp"
 #include "driver/gpio.h"
 #include "driver/uart.h"
-#include "sensor/Button.hpp"
+#include "esp/sensor/Button.hpp"
 #include "smooth/core/Task.h"
 
 //---------------------------------------------------------------------------
@@ -17,7 +17,7 @@ class CoffeeMakerTask : public smooth::core::Task {
     JuraConnection connection;
 
     static constexpr gpio_num_t BUTTON_SIGNAL = GPIO_NUM_13;
-    sensor::Button button;
+    esp::sensor::Button button;
     size_t buttonCounter{0x00};
     bool buttonPressed{false};
 

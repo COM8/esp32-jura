@@ -7,7 +7,7 @@
 #include "smooth/core/Task.h"
 
 //---------------------------------------------------------------------------
-namespace esp32jura::serial {
+namespace esp32jura::esp::serial {
 //---------------------------------------------------------------------------
 class SerialConnectionTask : public smooth::core::Task {
    private:
@@ -20,5 +20,5 @@ class SerialConnectionTask : public smooth::core::Task {
     void tick() override;
 };
 //---------------------------------------------------------------------------
-}  // namespace esp32jura::serial
+}  // namespace esp32jura::esp::serial
 //---------------------------------------------------------------------------

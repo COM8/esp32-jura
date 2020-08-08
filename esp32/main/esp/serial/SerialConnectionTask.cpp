@@ -3,7 +3,7 @@
 #include "smooth/core/task_priorities.h"
 
 //---------------------------------------------------------------------------
-namespace esp32jura::serial {
+namespace esp32jura::esp::serial {
 //---------------------------------------------------------------------------
 SerialConnectionTask::SerialConnectionTask() : Task("Serial Task", 0, smooth::core::APPLICATION_BASE_PRIO, std::chrono::milliseconds(100), 1) {}
 
@@ -17,5 +17,5 @@ void SerialConnectionTask::tick() {
     }
 }
 //---------------------------------------------------------------------------
-}  // namespace esp32jura::serial
+}  // namespace esp32jura::esp::serial
 //---------------------------------------------------------------------------
