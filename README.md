@@ -50,7 +50,7 @@ All other bits (except 0) are set to 1.
   DB1  DB2
 ```
 `DB1` and `DB2` are our actual data bits here.
-We have to combine alle 8 (of our 4 "raw" bytes) into a single data bit.
+We have to combine alle 8 (of our 4 "raw" bytes) into a single data byte.
 
 Examples:
 ```C++
