@@ -21,7 +21,5 @@
     "cmake.configureOnOpen": false,
     "files.exclude": {
         "esp32/build": true
-    },
-    "idf.port": "/dev/ttyUSB0",
-    "idf.espIdfPath": "${env:HOME}/Documents/ESP32/esp-idf",
+    }
 }
