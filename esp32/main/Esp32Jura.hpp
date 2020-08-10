@@ -27,6 +27,7 @@
 #ifdef MODE_XMPP
 #include "esp/WifiTask.hpp"
 #include "esp/actuator/RgbLed.hpp"
+#include "esp/sensor/Button.hpp"
 #include "xmpp/XmppTask.hpp"
 #endif  // MODE_XMPP
 
@@ -43,7 +44,7 @@ void app_main(void);
 //---------------------------------------------------------------------------
 class Esp32Jura : public smooth::core::Application {
    private:
-    std::shared_ptr<esp::Storage> storage{};
+    std::shared_ptr<esp::Storage> storage;
 
 #ifdef MODE_SNOOPER
     jura::JuraSnooperTask snooper{};
@@ -61,6 +62,7 @@ class Esp32Jura : public smooth::core::Application {
     std::shared_ptr<esp::actuator::RgbLed> rgbLed{};
     std::unique_ptr<xmpp::XmppTask> xmpp{};
     std::shared_ptr<esp::WifiTask> wifiTask{};
+    esp::sensor::Button resetButton{GPIO_NUM_13};
 #endif  // MODE_XMPP
 
    public:

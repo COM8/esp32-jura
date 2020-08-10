@@ -31,8 +31,8 @@ class Storage {
     void writeString(const std::string& key, const std::string& value);
 
    private:
-    bool ready;
-    nvs_handle_t handle;
+    bool ready{false};
+    nvs_handle_t handle{0};
 };
 
 //---------------------------------------------------------------------------
