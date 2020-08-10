@@ -26,5 +26,9 @@
         "--compile-commands-dir",
         "${workspaceFolder}/esp32/build/compile_commands.json",
         "--clang-tidy"
-    ]
+    ],
+    "files.associations": {
+        "*.pyx": "python",
+        "string_view": "cpp"
+    }
 }

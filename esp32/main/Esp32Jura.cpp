@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+#include "Credentials.hpp"
 #include "esp_system.h"
 
 //---------------------------------------------------------------------------
@@ -39,9 +40,12 @@ void Esp32Jura::init() {
     serialConnection.start();
 #endif  // MODE_SERIAL
 #ifdef MODE_XMPP
+    // initWithDummyValues();
+
     wifiTask->start();
     xmpp->start();
     rgbLed->turnOnOnly(rgbLed->r);
+
     // Check if reset button is pressen:
     if (resetButton.isPressed()) {
         std::cout << "Reset button pressed. Discarding initialization.\n";
@@ -61,6 +65,17 @@ void Esp32Jura::tick() {
         // Restart
         esp_restart();
     }
+}
+
+void Esp32Jura::initWithDummyValues() {
+    storage->writeString(esp::Storage::JID, JID);
+    storage->writeString(esp::Storage::JID_PASSWORD, JID_PASSWORD);
+    storage->writeString(esp::Storage::JID_SENDER, JID_SENDER);
+    storage->writeString(esp::Storage::WIFI_SSID, SSID);
+    storage->writeString(esp::Storage::WIFI_PASSWORD, PASSWORD);
+    storage->writeBool(esp::Storage::INITIALIZED, true);
+    storage->writeBool(esp::Storage::SETUP_DONE, true);
+    std::cout << "INITIALIZED WITH DUMMY VALUES!" << std::endl;
 }
 
 //---------------------------------------------------------------------------

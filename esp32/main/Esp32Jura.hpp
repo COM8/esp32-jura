@@ -70,6 +70,12 @@ class Esp32Jura : public smooth::core::Application {
 
     void init() override;
     void tick() override;
+
+   private:
+    /**
+     * Initialized the NVS with dummy/test values for debugging.
+     **/
+    void initWithDummyValues();
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura
