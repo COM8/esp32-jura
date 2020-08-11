@@ -9,7 +9,7 @@ namespace esp32jura::jura {
 //---------------------------------------------------------------------------
 class CoffeeMakerTask : public smooth::core::Task {
    private:
-    CoffeeMaker coffeeMaker;
+    CoffeeMaker coffeeMaker{};
 
     static constexpr gpio_num_t BUTTON_SIGNAL = GPIO_NUM_13;
     esp::sensor::Button button;

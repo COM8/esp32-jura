@@ -33,6 +33,8 @@ class XmppTask : public smooth::core::Task,
 
     static const std::string INITIAL_HELLO_MESSAGE;
 
+    jura::CoffeeMaker coffeeMaker{};
+
    public:
     XmppTask(std::shared_ptr<esp::Storage> storage);
     ~XmppTask();
