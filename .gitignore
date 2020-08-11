@@ -38,3 +38,6 @@ CMakeFiles/
 
 # C++ Utils
 esp32/components/cpp_utils/
+
+# Credentials
+esp32/main/Credentials.hpp
