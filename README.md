@@ -1,11 +1,18 @@
-# esp32-jura
-This project aims to control newer JURA coffee maker models with an ESP32.
+# ESP32 JURA
+This project aims to control newer JURA coffee maker models with an ESP32 and a new [XMPP-IoT](https://github.com/COM8/esp32-xmpp-iot) extension as reference implementation.
 Therefore we need to understand how the protocol for controlling JURA coffee makers works.
 
 This work is based on the excellent work done by the people over at [Protocol JURA](http://protocoljura.wiki-site.com/index.php/Hauptseite).
 They were able to figure out the basic protocol used for communication with older JURA coffee makers.
 
 Since newer models do not use this old V1Protocol any more I started this project to understand the new one.
+
+## Table of Contents
+1. [Protocol](#protocol)
+2. [JURA Commands](#jura-commands)
+3. [Requirements](#requirements)
+4. [Building](#building)
+5. [Project Structure](#project-structure)
 
 ## Protocol
 
@@ -117,15 +124,15 @@ Input            -> Output           -> Output_Hex Output_Dec Output_Char
 ```
 Which results in the message `TY:\r\n`.
 
-### Commands
+## JURA Commands
 Every message/command send from or to the coffee maker has to end with `\r\n` to be valid.
 For simplicity reasons we omit the `\r\n` from all of the following messages and examples.
 
-#### Command Structure
+### Command Structure
 In general for every **valid** command a response will be send from the coffee maker.
 The actual command is always uppercase (e.g. `TY:`) and the response send back is lowercase (`ty:EF532M V02.03`).
 
-#### Available Commands
+### Available Commands
 The following list of commands has been tested on an `Jura E6 2019 platin (15326)`.
 
 | Name | Command | Response | Description |
@@ -193,3 +200,89 @@ The following list of commands has been tested on an `Jura E6 2019 platin (15326
 | Debug mode on | `FN:8A` | `ku:`, `Ku:` pause `ku:`, `Ku:`, ... | Enables the debug mode. Sends continuously `ku:`, `Ku:`, ... Once an action like opening the hot water valve accrues, outputs information like percentage done. To disable it again disconnect the coffee maker from power.  |
 | UNKNOWN | `FN:90` | `ok:` | - |
 | UNKNOWN | `FN:99` | `ok:` | - |
+
+## Requirements
+This project builds on top the excellent [Espressif IoT Development Framework](https://github.com/espressif/esp-idf).
+Follow [this](https://docs.espressif.com/projects/esp-idf/en/release-v4.0/get-started/#installation-step-by-step) installation guide and install version **4.0.1** of the framework on your computer.
+
+## Building
+
+### Step 0: Setup
+```bash
+# Clone the repository:
+git clone https://github.com/COM8/esp32-jura.git
+# Switch into the newly cloned repository:
+cd esp32-jura
+# Initialize the repository.
+# This call will download further repositories and moves them to their appropriate place.
+./init.sh
+```
+
+### Step 1: Credentials.hpp
+To be able to build the project you have to create the following file: ``  
+Paste the following content in this newly created file:
+```c++
+#pragma once
+
+#include <string>
+
+//---------------------------------------------------------------------------
+namespace esp32jura {
+//---------------------------------------------------------------------------
+/**
+ * This file contains credentials for debugging the XMPP and WIFI connection,
+ * without having to go through the usual setup procedure.
+ * To apply these settings uncomment the "initWithDummyValues()" call in the "Esp32Jura.cpp" file.
+ *
+ * !!NEVER COMMIT THIS FILE!!
+ **/
+const std::string SSID = "Your WIFI SSID";
+const std::string PASSWORD = "Your WIFI Password";
+const std::string JID = "JID of this device";
+const std::string JID_PASSWORD = "Password for the JID of this device";
+const std::string JID_SENDER = "The owner JID of this device";
+//---------------------------------------------------------------------------
+}  // namespace esp32jura
+//---------------------------------------------------------------------------
+```
+This file contains debug and testing credentials for deploying the application on an esp32 without having to go through the usual setup procedure.
+
+### Step 3: Build
+You can build the project with the following command:
+```bash
+cd esp32
+idf.py build
+```
+
+### Step 4: Flash
+To flash the application on an ESP32 run the following commands:
+```bash
+cd esp32
+idf.py -p /dev/ttyUSB0 flash
+```
+Replace `/dev/ttyUSB0` with the port, where you plugged your ESP32 in to.
+
+It might be required, that you add your current user to the `dialout` group.  
+For this run the following command and **reboot** your pc afterwards.
+```bash
+sudo adduser "$USER" dialout
+```
+
+## Project Structure
+```
+.
+├── esp32 # ESP IDF project
+│   ├── ...
+│   ├── CMakeLists.txt # Root CMake file
+│   └── main # Source Code
+│       ├── ...
+│       ├── Esp32Jura.cpp # Main entry point
+│       └── CMakeLists.txt
+├── ...
+├── init.sh # Initializes the project
+├── LICENSE
+├── protocol # Snoops of the JURA communication with a Smart Connect [1]
+│   └── ...
+└── README.md
+```
+`[1]`: https://uk.jura.com/en/homeproducts/accessories/SmartConnect-Main-72167
