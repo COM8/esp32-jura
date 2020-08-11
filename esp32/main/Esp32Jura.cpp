@@ -40,7 +40,7 @@ void Esp32Jura::init() {
     serialConnection.start();
 #endif  // MODE_SERIAL
 #ifdef MODE_XMPP
-    // initWithDummyValues();
+    initWithDummyValues();
 
     wifiTask->start();
     xmpp->start();

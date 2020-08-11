@@ -44,7 +44,7 @@ void XmppTask::init() {
 
 void XmppTask::tick() {
     if (client->isConnected()) {
-        // pubSubHelper->requestNodeConfigMessage(pubSubHelper->XMPP_IOT_UI);
+        // pubSubHelper->requestNodeConfigMessage(pubSubHelper->XMPP_IOT_ACTUATORS);
     }
 }
 
@@ -112,19 +112,21 @@ void XmppTask::handlePubSubEventMessage(const tinyxml2::XMLElement* elem) {
         const tinyxml2::XMLAttribute* idAttrib = elem->FindAttribute("id");
         if (idAttrib && (elem = elem->FirstChildElement("val"))) {
             if (!strcmp(nodeAttrib->Value(), pubSubHelper->XMPP_IOT_ACTUATORS.c_str())) {
-                if (!strcmp(idAttrib->Value(), pubSubHelper->XMPP_IOT_ACTUATOR_RELAY.c_str())) {
-                    /*#ifdef RELAY
-                                        std::string val = elem->GetText();
-                                        relay.set(val == "1");
-                                        std::cout << "Relay value updated to: " << val << "\n";
-                    #endif  // RELAY
-                                    } else if (!strcmp(idAttrib->Value(), pubSubHelper->XMPP_IOT_ACTUATOR_SPEAKER.c_str())) {
-                    #ifdef SPEAKER
-                                        std::string val = elem->GetText();
-                                        speaker.set(val == "1");
-                                        std::cout << "Speaker value updated to: " << val << "\n";
-                    #endif  // SPEAKER*/
+                std::string name = idAttrib->Value();
+                std::string val = elem->GetText();
+                if (name == pubSubHelper->XMPP_IOT_ACTUATOR_ESPRESSO) {
+                    pubSubHelper->publishStatusNode("Brewing an espresso!");
+                    std::cout << "Espresso value updated to: " << val << "\n";
+                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_COFFEE) {
+                    std::string val = elem->GetText();
+                    pubSubHelper->publishStatusNode("Brewing coffee!");
+                    std::cout << "Coffee value updated to: " << val << "\n";
+                } else {
+                    std::string status = "You selected: " + name;
+                    pubSubHelper->publishStatusNode(status);
+                    std::cout << name << " value updated to: " << val << "\n";
                 }
+                pubSubHelper->publishCoffeeNode(name, false);
             }
         }
     }

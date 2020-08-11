@@ -8,15 +8,17 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp::helpers {
 //---------------------------------------------------------------------------
-const std::string PubSubHelper::XMPP_IOT_SENSOR_TEMP = "xmpp.iot.sensor.temp";
-const std::string PubSubHelper::XMPP_IOT_SENSOR_BAR = "xmpp.iot.sensor.bar";
-const std::string PubSubHelper::XMPP_IOT_SENSOR_MQ2 = "xmpp.iot.sensor.mq2";
-const std::string PubSubHelper::XMPP_IOT_SENSOR_PHOTORESISTOR = "xmpp.iot.sensor.photoresistor";
 const std::string PubSubHelper::XMPP_IOT_SENSORS = "xmpp.iot.sensors";
-const std::string PubSubHelper::XMPP_IOT_ACTUATORS = "xmpp.iot.actuator";
-const std::string PubSubHelper::XMPP_IOT_ACTUATOR_LED = "xmpp.iot.actuator.led";
-const std::string PubSubHelper::XMPP_IOT_ACTUATOR_SPEAKER = "xmpp.iot.actuator.speaker";
-const std::string PubSubHelper::XMPP_IOT_ACTUATOR_RELAY = "xmpp.iot.actuator.relay";
+const std::string PubSubHelper::XMPP_IOT_SENSOR_STATUS = "xmpp.iot.sensor.status";
+const std::string PubSubHelper::XMPP_IOT_ACTUATORS = "xmpp.iot.actuators";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_ESPRESSO = "xmpp.iot.actuator.espresso";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_COFFEE = "xmpp.iot.actuator.coffee";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_CAPPUCCINO = "xmpp.iot.actuator.cappuccino";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_MILK_FOAM = "xmpp.iot.actuator.mild_foam";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_CAFFE_BARISTA = "xmpp.iot.actuator.caffe_barista";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_LUNGO_BARISTA = "xmpp.iot.actuator.lungo_barista";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_ESPRESSO_DOPPIO = "xmpp.iot.actuator.espresso_doppio";
+const std::string PubSubHelper::XMPP_IOT_ACTUATOR_MACCHIATO = "xmpp.iot.actuator.macchiato";
 const std::string PubSubHelper::XMPP_IOT_UI = "xmpp.iot.ui";
 const std::string PubSubHelper::XMPP_IOT_NAMESPACE = "urn:xmpp:uwpx:iot";
 
@@ -71,40 +73,23 @@ std::string PubSubHelper::genPublishUiNodeMessage() {
     itemNode->InsertEndChild(xNode);
 
     tinyxml2::XMLElement* titleNode = doc.NewElement("title");
-    titleNode->SetText("ESP32 XMPP");
+    titleNode->SetText("JURA E6 Coffee Maker");
     xNode->InsertEndChild(titleNode);
 
-#if defined(BMP180) || defined(MQ2) || defined(PHOTORESISTOR)
-    tinyxml2::XMLElement* node;
-#endif
+    // Actuators:
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_ESPRESSO.c_str(), "boolean", nullptr, "Espresso:"));
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_COFFEE.c_str(), "boolean", nullptr, "Coffee:"));
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_CAPPUCCINO.c_str(), "boolean", nullptr, "Cappuccino:"));
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_MILK_FOAM.c_str(), "boolean", nullptr, "Milk foam:"));
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_CAFFE_BARISTA.c_str(), "boolean", nullptr, "Caffe Barista:"));
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_LUNGO_BARISTA.c_str(), "boolean", nullptr, "Lungo Barista:"));
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_ESPRESSO_DOPPIO.c_str(), "boolean", nullptr, "Espresso doppio:"));
+    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_MACCHIATO.c_str(), "boolean", nullptr, "Macchiato:"));
 
     // Sensors:
-#ifdef BMP180
-    node = genFieldNode(doc, XMPP_IOT_SENSOR_TEMP.c_str(), "text-single", nullptr, "Temperature:");
+    tinyxml2::XMLElement* node = genFieldNode(doc, XMPP_IOT_SENSOR_STATUS.c_str(), "text-single", nullptr, "Status:");
     node->InsertEndChild(doc.NewElement("xdd:readOnly"));
     xNode->InsertEndChild(node);
-    node = genFieldNode(doc, XMPP_IOT_SENSOR_BAR.c_str(), "text-single", nullptr, "Pressure:");
-    node->InsertEndChild(doc.NewElement("xdd:readOnly"));
-    xNode->InsertEndChild(node);
-#endif  // BMP180
-#ifdef MQ2
-    node = genFieldNode(doc, XMPP_IOT_SENSOR_MQ2.c_str(), "text-single", nullptr, "MQ2:");
-    node->InsertEndChild(doc.NewElement("xdd:readOnly"));
-    xNode->InsertEndChild(node);
-#endif  // MQ2
-#ifdef PHOTORESISTOR
-    node = genFieldNode(doc, XMPP_IOT_SENSOR_PHOTORESISTOR.c_str(), "text-single", nullptr, "Photoresistor:");
-    node->InsertEndChild(doc.NewElement("xdd:readOnly"));
-    xNode->InsertEndChild(node);
-#endif  // PHOTORESISTOR
-
-    // Actuators:
-#ifdef SPEAKER
-    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_SPEAKER.c_str(), "boolean", nullptr, "Speaker on:"));
-#endif  // SPEAKER
-#ifdef RELAY
-    xNode->InsertEndChild(genFieldNode(doc, XMPP_IOT_ACTUATOR_RELAY.c_str(), "boolean", nullptr, "Relay on:"));
-#endif  // RELAY
 
     tinyxml2::XMLPrinter printer;
     doc.FirstChild()->Accept(&printer);
@@ -137,53 +122,17 @@ tinyxml2::XMLElement* PubSubHelper::genPublishItemNode(tinyxml2::XMLDocument& do
     return itemNode;
 }
 
-void PubSubHelper::publishTempNode(double temp) {
-    const std::string value = std::to_string(temp);
-    const std::string unit = "celsius";
-    const std::string type = "double";
-    publishSensorNode(XMPP_IOT_SENSOR_TEMP, value, unit, type);
-}
-
-void PubSubHelper::publishPressureNode(int32_t pressure) {
-    const std::string value = std::to_string(pressure);
-    const std::string unit = "bar";
-    const std::string type = "uint";
-    publishSensorNode(XMPP_IOT_SENSOR_BAR, value, unit, type);
-}
-
-void PubSubHelper::publishLedNode(bool on) {
+void PubSubHelper::publishCoffeeNode(const std::string& node, bool on) {
     const std::string value = std::to_string(on);
     const std::string unit = "";
     const std::string type = "bool";
-    publishActuatorNode(XMPP_IOT_ACTUATOR_LED, value, unit, type);
+    publishActuatorNode(node, value, unit, type);
 }
 
-void PubSubHelper::publishSpeakerNode(bool on) {
-    const std::string value = std::to_string(on);
+void PubSubHelper::publishStatusNode(const std::string& status) {
     const std::string unit = "";
-    const std::string type = "bool";
-    publishActuatorNode(XMPP_IOT_ACTUATOR_SPEAKER, value, unit, type);
-}
-
-void PubSubHelper::publishMq2Node(int32_t val) {
-    const std::string value = std::to_string(val);
-    const std::string unit = "";
-    const std::string type = "uint";
-    publishSensorNode(XMPP_IOT_SENSOR_MQ2, value, unit, type);
-}
-
-void PubSubHelper::publishPhotoresistorNode(int32_t val) {
-    const std::string value = std::to_string(val);
-    const std::string unit = "";
-    const std::string type = "uint";
-    publishSensorNode(XMPP_IOT_SENSOR_PHOTORESISTOR, value, unit, type);
-}
-
-void PubSubHelper::publishRelayNode(bool on) {
-    const std::string value = std::to_string(on);
-    const std::string unit = "";
-    const std::string type = "bool";
-    publishActuatorNode(XMPP_IOT_ACTUATOR_RELAY, value, unit, type);
+    const std::string type = "text";
+    publishSensorNode(XMPP_IOT_SENSOR_STATUS, status, unit, type);
 }
 
 tinyxml2::XMLElement* PubSubHelper::genFieldNode(tinyxml2::XMLDocument& doc, const char* var, const char* type, const char* value, const char* label) {
@@ -381,24 +330,17 @@ void PubSubHelper::onDiscoverNodesReply(messages::Message& event) {
     client->send(msg);
 
     // Sensors:
-#ifdef BMP180
-    publishTempNode(0);
-    publishPressureNode(0);
-#endif  // BMP180
-#ifdef MQ2
-    publishMq2Node(0);
-#endif  // MQ2
-#ifdef PHOTORESISTOR
-    publishPhotoresistorNode(0);
-#endif  // PHOTORESISTOR
+    publishStatusNode("Ready for some coffee.");
 
     // Actuators:
-#ifdef SPEAKER
-    publishSpeakerNode(0);
-#endif  // SPEAKER
-#ifdef RELAY
-    publishRelayNode(0);
-#endif  // RELAY
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_ESPRESSO, false);
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_COFFEE, false);
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_CAPPUCCINO, false);
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_MILK_FOAM, false);
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_CAFFE_BARISTA, false);
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_LUNGO_BARISTA, false);
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_ESPRESSO_DOPPIO, false);
+    publishCoffeeNode(XMPP_IOT_ACTUATOR_MACCHIATO, false);
 
     /*if (std::find(nodes.begin(), nodes.end(), XMPP_IOT_UI) == nodes.end()) {
         std::string msg = genPublishUiNodeMessage();

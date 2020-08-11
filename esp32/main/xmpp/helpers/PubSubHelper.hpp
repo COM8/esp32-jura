@@ -40,27 +40,24 @@ class PubSubHelper : public INonConstEventListener<messages::Message> {
     tinyxml2::XMLElement* genPublishItemNode(tinyxml2::XMLDocument& doc, const char* nodeName, const char* itemId);
 
    public:
-    static const std::string XMPP_IOT_SENSOR_TEMP;
-    static const std::string XMPP_IOT_SENSOR_BAR;
-    static const std::string XMPP_IOT_SENSOR_MQ2;
-    static const std::string XMPP_IOT_SENSOR_PHOTORESISTOR;
     static const std::string XMPP_IOT_SENSORS;
+    static const std::string XMPP_IOT_SENSOR_STATUS;
     static const std::string XMPP_IOT_ACTUATORS;
-    static const std::string XMPP_IOT_ACTUATOR_LED;
-    static const std::string XMPP_IOT_ACTUATOR_SPEAKER;
-    static const std::string XMPP_IOT_ACTUATOR_RELAY;
+    static const std::string XMPP_IOT_ACTUATOR_ESPRESSO;
+    static const std::string XMPP_IOT_ACTUATOR_COFFEE;
+    static const std::string XMPP_IOT_ACTUATOR_CAPPUCCINO;
+    static const std::string XMPP_IOT_ACTUATOR_MILK_FOAM;
+    static const std::string XMPP_IOT_ACTUATOR_CAFFE_BARISTA;
+    static const std::string XMPP_IOT_ACTUATOR_LUNGO_BARISTA;
+    static const std::string XMPP_IOT_ACTUATOR_ESPRESSO_DOPPIO;
+    static const std::string XMPP_IOT_ACTUATOR_MACCHIATO;
     static const std::string XMPP_IOT_UI;
     static const std::string XMPP_IOT_NAMESPACE;
 
     void publishSensorNode(const std::string& node, const std::string& value, const std::string& unit, const std::string& type);
     void publishActuatorNode(const std::string& node, const std::string& value, const std::string& unit, const std::string& type);
-    void publishTempNode(double temp);
-    void publishPressureNode(int32_t pressure);
-    void publishMq2Node(int32_t val);
-    void publishPhotoresistorNode(int32_t val);
-    void publishRelayNode(bool on);
-    void publishLedNode(bool on);
-    void publishSpeakerNode(bool on);
+    void publishCoffeeNode(const std::string& node, bool on);
+    void publishStatusNode(const std::string& status);
     void requestNodeConfigMessage(const std::string& nodeName);
     void createNode(const std::string& nodeName);
     void deleteNode(const std::string& nodeName);
