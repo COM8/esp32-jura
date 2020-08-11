@@ -1,0 +1,95 @@
+#pragma once
+
+#include <map>
+#include <string>
+#include <vector>
+
+#include "JuraConnection.hpp"
+#include "driver/gpio.h"
+
+//---------------------------------------------------------------------------
+namespace esp32jura::jura {
+//---------------------------------------------------------------------------
+class CoffeeMaker {
+   public:
+    /**
+     * All available coffee types.
+     **/
+    enum coffee_t { ESPRESSO = 0, COFFEE = 1, CAPPUCCINO = 2, MILK_FOAM = 3, CAFFE_BARISTA = 4, LUNGO_BARISTA = 5, ESPRESSO_DOPPIO = 6, MACCHIATO = 7 };
+    enum jura_button_t {
+        BUTTON_1 = 1,
+        BUTTON_2 = 2,
+        BUTTON_3 = 3,
+        BUTTON_4 = 4,
+        BUTTON_5 = 5,
+        BUTTON_6 = 6,
+    };
+
+   private:
+    static constexpr uart_port_t UART_PORT = UART_NUM_1;
+    static constexpr gpio_num_t UART_TX = GPIO_NUM_14;
+    static constexpr gpio_num_t UART_RX = GPIO_NUM_27;
+
+    static constexpr size_t NUM_PAGES = 2;
+    /**
+     * Mapping of all coffee types to page.
+     **/
+    std::map<coffee_t, size_t> coffee_page_map{{coffee_t::ESPRESSO, 0},      {coffee_t::COFFEE, 0},        {coffee_t::CAPPUCCINO, 0},      {coffee_t::MILK_FOAM, 0},
+                                               {coffee_t::CAFFE_BARISTA, 1}, {coffee_t::LUNGO_BARISTA, 1}, {coffee_t::ESPRESSO_DOPPIO, 1}, {coffee_t::MACCHIATO, 1}};
+    /**
+     * Mapping of all coffee types to their button.
+     **/
+    std::map<coffee_t, jura_button_t> coffee_button_map{{coffee_t::ESPRESSO, jura_button_t::BUTTON_1},        {coffee_t::COFFEE, jura_button_t::BUTTON_2},
+                                                        {coffee_t::CAPPUCCINO, jura_button_t::BUTTON_4},      {coffee_t::MILK_FOAM, jura_button_t::BUTTON_5},
+                                                        {coffee_t::CAFFE_BARISTA, jura_button_t::BUTTON_1},   {coffee_t::LUNGO_BARISTA, jura_button_t::BUTTON_2},
+                                                        {coffee_t::ESPRESSO_DOPPIO, jura_button_t::BUTTON_4}, {coffee_t::MACCHIATO, jura_button_t::BUTTON_5}};
+
+    /**
+     * The current page we are on.
+     **/
+    size_t pageNum{0};
+
+   public:
+    JuraConnection connection;
+
+   public:
+    CoffeeMaker();
+
+    /**
+     * Initializes UART and coffee maker connection.
+     **/
+    void init();
+    /**
+     * Switches to the next page.
+     * 0 -> 1
+     * 1 -> 0
+     **/
+    void switch_page();
+    /**
+     * Switches to the given page number.
+     * Does nothing, in case the page number is the same as the current one.
+     **/
+    void switch_page(size_t page_num);
+    /**
+     * Brews the given coffee and switches to the appropriate page for this.
+     **/
+    void brew_coffee(coffee_t coffee);
+    /**
+     * Simulates a button press of the given button.
+     **/
+    void press_button(jura_button_t button);
+
+   private:
+    /**
+     * Returns the page number for the given coffee type.
+     **/
+    size_t get_page_num(coffee_t coffee);
+
+    /**
+     * Returns the button number for the given coffee type.
+     **/
+    jura_button_t get_button_num(coffee_t coffee);
+};
+//---------------------------------------------------------------------------
+}  // namespace esp32jura::jura
+//---------------------------------------------------------------------------

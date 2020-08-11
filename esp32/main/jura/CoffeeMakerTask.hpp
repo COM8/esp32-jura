@@ -1,8 +1,6 @@
 #pragma once
 
-#include "JuraConnection.hpp"
-#include "driver/gpio.h"
-#include "driver/uart.h"
+#include "CoffeeMaker.hpp"
 #include "esp/sensor/Button.hpp"
 #include "smooth/core/Task.h"
 
@@ -11,10 +9,7 @@ namespace esp32jura::jura {
 //---------------------------------------------------------------------------
 class CoffeeMakerTask : public smooth::core::Task {
    private:
-    static constexpr uart_port_t UART_PORT = UART_NUM_1;
-    static constexpr gpio_num_t UART_TX = GPIO_NUM_14;
-    static constexpr gpio_num_t UART_RX = GPIO_NUM_27;
-    JuraConnection connection;
+    CoffeeMaker coffeeMaker;
 
     static constexpr gpio_num_t BUTTON_SIGNAL = GPIO_NUM_13;
     esp::sensor::Button button;

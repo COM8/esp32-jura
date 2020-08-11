@@ -7,9 +7,10 @@ set(SOURCES Esp32Jura.cpp
 
             utils/SerialJuraBridgeTask.cpp
             
+            jura/JuraConnection.cpp
+            jura/CoffeeMaker.cpp
             jura/CoffeeMakerTask.cpp
             jura/JuraSnooperTask.cpp
-            jura/JuraConnection.cpp
 
             esp/Storage.cpp
             esp/WifiTask.cpp
