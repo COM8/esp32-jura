@@ -11,6 +11,7 @@
 #include "INonConstEventListener.hpp"
 #include "esp/Storage.hpp"
 #include "helpers/PubSubHelper.hpp"
+#include "jura/CoffeeMaker.hpp"
 #include "messages/Message.hpp"
 #include "xmpp/XmppClient.hpp"
 
@@ -32,10 +33,6 @@ class XmppTask : public smooth::core::Task,
 
     static const std::string INITIAL_HELLO_MESSAGE;
 
-    void onReady();
-    void handleIoTMessageMessage(const char* msg);
-    void handlePubSubEventMessage(const tinyxml2::XMLElement* elem);
-
    public:
     XmppTask(std::shared_ptr<esp::Storage> storage);
     ~XmppTask();
@@ -48,6 +45,11 @@ class XmppTask : public smooth::core::Task,
     void event(const smooth::core::network::NetworkStatus& event) override;
     void event(const XmppClientConnectionState& event) override;
     void event(messages::Message& event) override;
+
+   private:
+    void onReady();
+    void handleIoTMessageMessage(const char* msg);
+    void handlePubSubEventMessage(const tinyxml2::XMLElement* elem);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp
