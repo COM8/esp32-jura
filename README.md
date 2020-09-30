@@ -8,11 +8,15 @@ They were able to figure out the basic protocol used for communication with olde
 Since newer models do not use this old V1Protocol any more I started this project to understand the new one.
 
 ## Table of Contents
+0. [Example](#example)
 1. [Protocol](#protocol)
 2. [JURA Commands](#jura-commands)
 3. [Requirements](#requirements)
 4. [Building](#building)
 5. [Project Structure](#project-structure)
+
+## Example
+[![Watch the video](https://user-images.githubusercontent.com/11741404/89994342-489af800-dc88-11ea-9a4e-c4407ce79a8d.png)](https://twitter.com/UWPX_APP/status/1293461429677436931)
 
 ## Protocol
 
