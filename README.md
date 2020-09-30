@@ -159,18 +159,17 @@ The following list of commands has been tested on an `Jura E6 2019 platin (15326
 | Coffee Heater off | `FN:04` | `ok:` | Turns off the coffee heater. |
 | Grinder on | `FN:07` | `ok:` | Turns on the coffee grinder. |
 | Grinder off | `FN:08` | `ok:` | Turns off the coffee grinder. |
-| Coffee press on | `FN:09` | `ok:` | Turns on the coffee press. **Probably** |
-| Coffee press off | `FN:0A` | `ok:` | Turns off the coffee press. **Probably** |
-| **Something** on | `FN:0B` | `ok:` | Turns **something** on. |
-| **Something** off | `FN:0C` | `ok:` | Turns **something** on. |
+| Brew Group **Something** on | `FN:09` | `ok:` | Turns **something** in relation to the brew group on. |
+| Brew Group **Something** off | `FN:0A` | `ok:` | Turns **something** in relation to the brew group off. |
+| Coffee press on | `FN:0B` | `ok:` | Turns on the coffee press. |
+| Coffee press off | `FN:0C` | `ok:` | Turns off the coffee press. |
 | Init Brew Group | `FN:0D` | `ok:` | Initializes the brew group. |
-| Brew Group to **unknown** Postion XYZ | `FN:0E` | `ok:` | Moves the brew group into an currently unknown position. |
-| Brew Group to **unknown** Postion XYZ | `FN:0F` | `ok:` | Moves the brew group into an currently unknown position. |
-| Brew Group to **unknown** Postion XYZ | `FN:13` | `ok:` | Moves the brew group into an currently unknown position. |
+| Brew Group to **open** Postion | `FN:0E` | `ok:` | Moves the brew group into the "open" position. |
+| Brew Group to **grinding** Postion | `FN:0F` | `ok:` | Moves the brew group into the grinding position. |
 | Brew Group to **unknown** Postion XYZ | `FN:13` | `ok:` | Moves the brew group into an currently unknown position. |
 | Brew Group to **unknown** Postion XYZ | `FN:1B` | `ok:` | Moves the brew group into an currently unknown position. |
-| Brew Group to **unknown** Postion XYZ | `FN:1C` | `ok:` | Moves the brew group into an currently unknown position. |
-| Brew Group **something** | `FN:22` | `ok:` | Some unknown operation with the brew group. |
+| Brew Group to **throw out position?!** Postion XYZ | `FN:1C` | `ok:` | Moves the brew group into the throw out position. |
+| Brew Group to **brewing** Position | `FN:22` | `ok:` | Moves the brew group into the brewing position. |
 | UNKNOWN | `FN:24` | `ok:` | - |
 | UNKNOWN | `FN:25` | `ok:` | - |
 | UNKNOWN | `FN:26` | `ok:` | - |
@@ -200,6 +199,18 @@ The following list of commands has been tested on an `Jura E6 2019 platin (15326
 | Debug mode on | `FN:8A` | `ku:`, `Ku:` pause `ku:`, `Ku:`, ... | Enables the debug mode. Sends continuously `ku:`, `Ku:`, ... Once an action like opening the hot water valve accrues, outputs information like percentage done. To disable it again disconnect the coffee maker from power.  |
 | UNKNOWN | `FN:90` | `ok:` | - |
 | UNKNOWN | `FN:99` | `ok:` | - |
+
+### Coffee Brewing Sequence
+* `FN:07` # Grind on
+* Sleep >= 3 seconds # Determines how strong the coffee will be
+* `FN:08` # Grind off
+* `FN:22` # Brew group to brewing position
+* `FN:0B` # Coffee press on
+* `FN:0C` # Coffee press off
+* `FN:01` # Coffee pump on
+* Sleep >= 10 seconds
+* `FN:02` # Coffee pump off
+* `FN:0D` # Reset the brew group and throw out the old coffee grain
 
 ## Requirements
 This project builds on top the excellent [Espressif IoT Development Framework](https://github.com/espressif/esp-idf).
