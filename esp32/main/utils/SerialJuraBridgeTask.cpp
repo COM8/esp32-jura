@@ -34,8 +34,21 @@ void SerialJuraBridgeTask::tick() {
     if (jura_connection.read_decoded(buffer) && buffer.size() > 0) {
         // std::cout << "[C->S]: Received " << buffer.size() << " bytes" << std::endl;
         serial_connection.write(buffer);
+        // serial_connection.write(to_binaryString(buffer));
         buffer.clear();
     }
+}
+
+std::string SerialJuraBridgeTask::to_binaryString(const std::vector<uint8_t>& buffer) {
+    std::string result = std::to_string(buffer.size()) + "B\t";
+    for (const uint8_t& byte : buffer) {
+        for (size_t i = 0; i < 8; i++) {
+            result += std::to_string(((byte >> (7 - i)) & 0b00000001));
+        }
+        result += ' ';
+    }
+    result += "\r\n";
+    return result;
 }
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::utils

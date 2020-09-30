@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "esp/serial/SerialConnection.hpp"
 #include "jura/JuraConnection.hpp"
 #include "smooth/core/Task.h"
@@ -21,6 +24,9 @@ class SerialJuraBridgeTask : public smooth::core::Task {
 
     void init() override;
     void tick() override;
+
+   private:
+    std::string to_binaryString(const std::vector<uint8_t>& buffer);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::utils
