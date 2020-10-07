@@ -214,6 +214,12 @@ The following list of commands has been tested on an `Jura E6 2019 platin (15326
 * `FN:0C` # Coffee press off
 * `FN:03` # Turn on the coffee water heater
 * `FN:01` # Coffee water pump on
+* Sleep 2 seconds # Initial amount of water
+* `FN:02` # Coffee water pump off
+* `FN:04` # Turn off the coffee water heater
+* Sleep 2 seconds # Allow the water to run everywhere
+* `FN:03` # Turn on the coffee water heater
+* `FN:01` # Coffee water pump on
 * Sleep 40 seconds # 40 seconds of water result in 200 ml of coffee
 * `FN:02` # Coffee water pump off
 * `FN:04` # Turn off the coffee water heater
