@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <chrono>
 #include <string>
 #include <vector>
 
@@ -65,6 +66,18 @@ class JuraConnection {
      * Each data byte consists of 4 JURA bytes which will be decoded into a single data byte.
      **/
     bool read_decoded(std::vector<uint8_t>& data);
+    /**
+     * Waits until the coffee maker responded with a "ok:\r\n".
+     * The default timeout for this operation is 5 seconds.
+     * To disable the timeout, set the timeout to 0 seconds.
+     * Returns true on success.
+     * Returns false when a timeout occurred.
+     **/
+    bool wait_for_ok(const std::chrono::milliseconds timeout = std::chrono::milliseconds{5000});
+    /**
+     * Flushes the read buffer.
+     **/
+    void flush_read_buffer();
 
     /**
      * Encodes the given byte into 4 JURA bytes and writes them to the coffee maker.

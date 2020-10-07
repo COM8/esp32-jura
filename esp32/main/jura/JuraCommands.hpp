@@ -17,6 +17,18 @@ const std::string JURA_BUTTON_3 = "FA:06\r\n";
 const std::string JURA_BUTTON_4 = "FA:07\r\n";
 const std::string JURA_BUTTON_5 = "FA:08\r\n";
 const std::string JURA_BUTTON_6 = "FA:09\r\n";
+
+const std::string JURA_BREW_GROUP_TO_BREWING_POSITION = "FN:22\r\n";
+const std::string JURA_BREW_GROUP_RESET = "FN:0D\r\n";
+
+const std::string JURA_GRINDER_ON = "FN:07\r\n";
+const std::string JURA_GRINDER_OFF = "FN:08\r\n";
+const std::string JURA_COFFEE_PRESS_ON = "FN:0B\r\n";
+const std::string JURA_COFFEE_PRESS_OFF = "FN:0C\r\n";
+const std::string JURA_COFFEE_WATER_HEATER_ON = "FN:03\r\n";
+const std::string JURA_COFFEE_WATER_HEATER_OFF = "FN:04\r\n";
+const std::string JURA_COFFEE_WATER_PUMP_ON = "FN:01\r\n";
+const std::string JURA_COFFEE_WATER_PUMP_OFF = "FN:02\r\n";
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura
 //---------------------------------------------------------------------------

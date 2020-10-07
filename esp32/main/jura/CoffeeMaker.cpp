@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
+#include <string>
 #include <thread>
 
 #include "JuraCommands.hpp"
@@ -97,8 +98,52 @@ void CoffeeMaker::press_button(jura_button_t button) {
             break;
     }
 
-    // Give the coffee maker to to react:
+    // Give the coffee maker time to react:
     std::this_thread::sleep_for(std::chrono::milliseconds{500});
+}
+
+void CoffeeMaker::brew_custom_coffee(const std::chrono::milliseconds grindTime, const std::chrono::milliseconds waterTime) {
+    std::cout << "Brewing custom coffee with " << std::to_string(grindTime.count()) << " ms grind time and " << std::to_string(waterTime.count()) << " ms water time...\n";
+
+    // Grind:
+    std::cout << "Custom coffee grinding...\n";
+    write_and_wait(JURA_GRINDER_ON);
+    std::this_thread::sleep_for(grindTime);
+    write_and_wait(JURA_GRINDER_OFF);
+    write_and_wait(JURA_BREW_GROUP_TO_BREWING_POSITION);
+
+    // Compress:
+    std::cout << "Custom coffee compressing...\n";
+    write_and_wait(JURA_COFFEE_PRESS_ON);
+    std::this_thread::sleep_for(std::chrono::milliseconds{500});
+    write_and_wait(JURA_COFFEE_PRESS_OFF);
+
+    // Brew step 1:
+    std::cout << "Custom coffee brewing...\n";
+    write_and_wait(JURA_COFFEE_WATER_HEATER_ON);
+    write_and_wait(JURA_COFFEE_WATER_PUMP_ON);
+    std::this_thread::sleep_for(std::chrono::milliseconds{2000});
+    write_and_wait(JURA_COFFEE_WATER_PUMP_OFF);
+    write_and_wait(JURA_COFFEE_WATER_HEATER_OFF);
+    std::this_thread::sleep_for(std::chrono::milliseconds{2000});
+
+    // Brew setp 2:
+    write_and_wait(JURA_COFFEE_WATER_HEATER_ON);
+    write_and_wait(JURA_COFFEE_WATER_PUMP_ON);
+    std::this_thread::sleep_for(waterTime);
+    write_and_wait(JURA_COFFEE_WATER_PUMP_OFF);
+    write_and_wait(JURA_COFFEE_WATER_HEATER_OFF);
+
+    // Reset:
+    std::cout << "Custom coffee finishing up...\n";
+    write_and_wait(JURA_BREW_GROUP_RESET);
+    std::cout << "Custom coffee done.\n";
+}
+
+bool CoffeeMaker::write_and_wait(const std::string s) {
+    connection.flush_read_buffer();
+    connection.write_decoded(s);
+    return connection.wait_for_ok();
 }
 
 //---------------------------------------------------------------------------

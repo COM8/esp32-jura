@@ -1,6 +1,5 @@
 #include "JuraConnection.hpp"
 
-#include <chrono>
 #include <cstdio>
 #include <iostream>
 #include <string>
@@ -217,6 +216,26 @@ size_t JuraConnection::read_encoded(std::vector<std::array<uint8_t, 4>>& data) {
     // Try to read again to ensure there is no data available any more:
     return read_encoded(data);
 }
+
+bool JuraConnection::wait_for_ok(const std::chrono::milliseconds timeout) {
+    std::vector<uint8_t> buffer;
+
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    while ((timeout.count() <= 0) || ((std::chrono::steady_clock::now() - start) < timeout)) {
+        if (read_decoded(buffer)) {
+            for (size_t i = 0; (buffer.size() >= 5) && (i < buffer.size() - 4); i++) {
+                if (buffer[i] == 'o' && buffer[i + 1] == 'k' && buffer[i + 2] == ':' && buffer[i + 3] == '\r' && buffer[i + 4] == '\n') {
+                    return true;
+                }
+                buffer.clear();
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds{250});
+    }
+    return false;
+}
+
+void JuraConnection::flush_read_buffer() { uart_flush(UART_PORT); }
 
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura

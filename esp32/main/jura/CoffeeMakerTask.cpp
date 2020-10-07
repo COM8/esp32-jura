@@ -11,9 +11,9 @@ namespace esp32jura::jura {
 CoffeeMakerTask::CoffeeMakerTask() : Task("Coffee Task", 0, smooth::core::APPLICATION_BASE_PRIO, std::chrono::milliseconds(100), 1), button(BUTTON_SIGNAL) {}
 
 void CoffeeMakerTask::init() {
-    std::cout << "Initializing coffee maker...\n";
+    std::cout << "Initializing coffee maker task...\n";
     coffeeMaker.init();
-    std::cout << "Coffee maker initialized.\n";
+    std::cout << "Coffee maker task initialized.\n";
 }
 
 void CoffeeMakerTask::tick() {
@@ -30,7 +30,7 @@ void CoffeeMakerTask::write() {
         if (!buttonPressed) {
             buttonPressed = true;
 
-            std::stringstream stream;
+            /*std::stringstream stream;
             stream << std::setfill('0') << std::setw(2) << std::uppercase;
             stream << std::hex << buttonCounter;
             // std::string msg = "RT:" + stream.str();
@@ -42,7 +42,8 @@ void CoffeeMakerTask::write() {
                 msg += +"\r\n";
                 coffeeMaker.connection.write_decoded(msg);
             }
-            ++buttonCounter;
+            ++buttonCounter;*/
+            coffeeMaker.brew_custom_coffee();
         }
     } else {
         buttonPressed = false;

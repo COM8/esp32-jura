@@ -210,11 +210,12 @@ The following list of commands has been tested on an `Jura E6 2019 platin (15326
 * `FN:08` # Grind off
 * `FN:22` # Brew group to brewing position
 * `FN:0B` # Coffee press on
+* Sleep 0.5 seconds # Compress the coffee
 * `FN:0C` # Coffee press off
 * `FN:03` # Turn on the coffee water heater
-* `FN:01` # Coffee pump on
+* `FN:01` # Coffee water pump on
 * Sleep 40 seconds # 40 seconds of water result in 200 ml of coffee
-* `FN:02` # Coffee pump off
+* `FN:02` # Coffee water pump off
 * `FN:04` # Turn off the coffee water heater
 * `FN:0D` # Reset the brew group and throw out the old coffee grain
 

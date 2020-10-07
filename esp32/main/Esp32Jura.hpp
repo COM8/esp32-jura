@@ -1,8 +1,8 @@
 #pragma once
 
 // #define MODE_SNOOPER
-// #define MODE_COFFEE_MAKER
-#define MODE_BRIDGE
+#define MODE_COFFEE_MAKER
+// #define MODE_BRIDGE
 // #define MODE_SERIAL
 // #define MODE_XMPP
 
@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "esp/Storage.hpp"
+#include "esp/sensor/Button.hpp"
 
 #ifdef MODE_SNOOPER
 #include "jura/JuraSnooperTask.hpp"
@@ -19,7 +20,6 @@
 #include "jura/CoffeeMakerTask.hpp"
 #endif  // MODE_COFFEE_MAKER
 #ifdef MODE_BRIDGE
-#include "esp/sensor/Button.hpp"
 #include "utils/SerialJuraBridgeTask.hpp"
 #endif  // MODE_BRIDGE
 #ifdef MODE_SERIAL
@@ -28,7 +28,6 @@
 #ifdef MODE_XMPP
 #include "esp/WifiTask.hpp"
 #include "esp/actuator/RgbLed.hpp"
-#include "esp/sensor/Button.hpp"
 #include "xmpp/XmppTask.hpp"
 #endif  // MODE_XMPP
 
@@ -46,6 +45,7 @@ void app_main(void);
 class Esp32Jura : public smooth::core::Application {
    private:
     std::shared_ptr<esp::Storage> storage;
+    esp::sensor::Button resetButton{GPIO_NUM_13};
 
 #ifdef MODE_SNOOPER
     jura::JuraSnooperTask snooper{};
@@ -55,7 +55,6 @@ class Esp32Jura : public smooth::core::Application {
 #endif  // MODE_COFFEE_MAKER
 #ifdef MODE_BRIDGE
     utils::SerialJuraBridgeTask bridge{};
-    esp::sensor::Button resetButton{GPIO_NUM_13};
 #endif  // MODE_BRIDGE
 #ifdef MODE_SERIAL
     serial::SerialConnectionTask serialConnection{};
@@ -64,7 +63,6 @@ class Esp32Jura : public smooth::core::Application {
     std::shared_ptr<esp::actuator::RgbLed> rgbLed{};
     std::unique_ptr<xmpp::XmppTask> xmpp{};
     std::shared_ptr<esp::WifiTask> wifiTask{};
-    esp::sensor::Button resetButton{GPIO_NUM_13};
 #endif  // MODE_XMPP
 
    public:
