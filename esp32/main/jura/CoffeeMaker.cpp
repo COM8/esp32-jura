@@ -70,27 +70,27 @@ CoffeeMaker::jura_button_t CoffeeMaker::get_button_num(coffee_t coffee) {
 void CoffeeMaker::press_button(jura_button_t button) {
     switch (button) {
         case jura_button_t::BUTTON_1:
-            connection.write_decoded(JURA_BUTTON_1);
+            write_and_wait(JURA_BUTTON_1);
             break;
 
         case jura_button_t::BUTTON_2:
-            connection.write_decoded(JURA_BUTTON_2);
+            write_and_wait(JURA_BUTTON_2);
             break;
 
         case jura_button_t::BUTTON_3:
-            connection.write_decoded(JURA_BUTTON_3);
+            write_and_wait(JURA_BUTTON_3);
             break;
 
         case jura_button_t::BUTTON_4:
-            connection.write_decoded(JURA_BUTTON_4);
+            write_and_wait(JURA_BUTTON_4);
             break;
 
         case jura_button_t::BUTTON_5:
-            connection.write_decoded(JURA_BUTTON_5);
+            write_and_wait(JURA_BUTTON_5);
             break;
 
         case jura_button_t::BUTTON_6:
-            connection.write_decoded(JURA_BUTTON_6);
+            write_and_wait(JURA_BUTTON_6);
             break;
 
         default:
