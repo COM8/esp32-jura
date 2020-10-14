@@ -2,8 +2,8 @@
 
 #include <codecvt>
 #include <locale>
-
-#include "esp_system.h"
+#include <random>
+#include <sstream>
 
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp {
@@ -35,26 +35,36 @@ std::vector<uint8_t> wstring_convert_to_bytes(const wchar_t* str) {
     return std::vector<uint8_t>(string.begin(), string.end());
 }
 
-std::string randUuid() { return randHexString(8) + '-' + randHexString(4) + '-' + randHexString(4) + '-' + randHexString(4) + '-' + randHexString(12); }
+std::string generate_uuid_v4() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_int_distribution dis(0, 15);
+    static std::uniform_int_distribution dis2(8, 11);
 
-std::string randFakeUuid() {
-    return std::to_string(esp_random()) + "-" + std::to_string(esp_random()) + "-" + std::to_string(esp_random()) + "-" + std::to_string(esp_random()) + "-" + std::to_string(esp_random());
-}
-
-std::string randHexString(std::size_t len) {
-    size_t bytes = len / 2;
-    uint8_t* buff = static_cast<uint8_t*>(malloc(bytes));
-    esp_fill_random(buff, bytes);
-    char* outBuff = static_cast<char*>(malloc(sizeof(char) * (len + 1)));
-    for (size_t i = 0; i < bytes; i++) {
-        sprintf(outBuff + i, "%02X", buff[i]);
+    std::stringstream ss;
+    int i;
+    ss << std::hex;
+    for (i = 0; i < 8; i++) {
+        ss << dis(gen);
     }
-    outBuff[len] = '\0';
-    std::string result(outBuff, len);
-    if (len % 2 != 0) {
-        result.substr(1, result.length() - 1);
+    ss << "-";
+    for (i = 0; i < 4; i++) {
+        ss << dis(gen);
     }
-    return result;
+    ss << "-4";
+    for (i = 0; i < 3; i++) {
+        ss << dis(gen);
+    }
+    ss << "-";
+    ss << dis2(gen);
+    for (i = 0; i < 3; i++) {
+        ss << dis(gen);
+    }
+    ss << "-";
+    for (i = 0; i < 12; i++) {
+        ss << dis(gen);
+    };
+    return ss.str();
 }
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp

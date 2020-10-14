@@ -31,9 +31,12 @@ std::wstring wstring_convert_from_bytes(const std::vector<char>& v);
  **/
 std::vector<uint8_t> wstring_convert_to_bytes(const wchar_t* str);
 
-std::string randUuid();
-std::string randFakeUuid();
-std::string randHexString(std::size_t len);
+/**
+ * Generates a random UUID and returns it.
+ * Example: de305d54-75b4-431b-adb2-eb6b9e546013
+ * Source: https://stackoverflow.com/a/60198074
+ **/
+std::string generate_uuid_v4();
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp
    //---------------------------------------------------------------------------

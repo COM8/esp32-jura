@@ -41,7 +41,7 @@ void XmppClient::send(const std::string& msg) { connection.send(msg); }
 void XmppClient::send(const std::wstring& msg) { connection.send(msg); }
 
 void XmppClient::sendMessage(const std::string& to, const std::string& body) {
-    std::string msg = "<message from='" + account.jid.getFull() + "' id='" + randFakeUuid() + "' to='" + to + "' type='chat' xml:lang='en'><body>" + body + "</body></message>";
+    std::string msg = "<message from='" + account.jid.get_full() + "' id='" + generate_uuid_v4() + "' to='" + to + "' type='chat' xml:lang='en'><body>" + body + "</body></message>";
     send(msg);
 }
 
@@ -58,7 +58,7 @@ void XmppClient::unsubscribeFromMessagesListener(MessageListener* messageListene
 }
 
 void XmppClient::addToRoster(std::string& bareJid) {
-    std::string msg = "<iq type='get' from='" + account.jid.getFull() + "' to='" + account.jid.domainPart + "' id='" + randFakeUuid() + "'><query xmlns='jabber:iq:roster'><item jid='" + bareJid +
+    std::string msg = "<iq type='get' from='" + account.jid.get_full() + "' to='" + account.jid.domainPart + "' id='" + generate_uuid_v4() + "'><query xmlns='jabber:iq:roster'><item jid='" + bareJid +
                       "' name='Nurse'></item></query></iq>";
     send(msg);
 }

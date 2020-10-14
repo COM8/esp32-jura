@@ -8,7 +8,7 @@
     "editor.formatOnPaste": true,
     "C_Cpp.clang_format_style": "file",
     "C_Cpp.clang_format_sortIncludes": true,
-    "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",
+    "C_Cpp.errorSquiggles": "Enabled",
     "editor.renderWhitespace": "all",
     "editor.renderIndentGuides": true,
     "C_Cpp.default.compileCommands": "${workspaceFolder}/esp32/build/compile_commands.json",

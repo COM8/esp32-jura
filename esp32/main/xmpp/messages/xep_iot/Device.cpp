@@ -158,8 +158,8 @@ void Device::delete_node(const std::string& nodeName) {
     tinyxml2::XMLDocument doc;
     tinyxml2::XMLElement* iqNode = doc.NewElement("iq");
     iqNode->SetAttribute("type", "set");
-    iqNode->SetAttribute("from", client->account.jid.getFull().c_str());
-    iqNode->SetAttribute("id", randFakeUuid().c_str());
+    iqNode->SetAttribute("from", client->account.jid.get_full().c_str());
+    iqNode->SetAttribute("id", generate_uuid_v4().c_str());
 
     tinyxml2::XMLElement* pubSubNode = doc.NewElement("pubsub");
     pubSubNode->SetAttribute("xmlns", "http://jabber.org/protocol/pubsub#owner");
@@ -179,8 +179,8 @@ void Device::create_node(const std::string& nodeName) {
     tinyxml2::XMLDocument doc;
     tinyxml2::XMLElement* iqNode = doc.NewElement("iq");
     iqNode->SetAttribute("type", "set");
-    iqNode->SetAttribute("from", client->account.jid.getFull().c_str());
-    iqNode->SetAttribute("id", randFakeUuid().c_str());
+    iqNode->SetAttribute("from", client->account.jid.get_full().c_str());
+    iqNode->SetAttribute("id", generate_uuid_v4().c_str());
 
     tinyxml2::XMLElement* pubSubNode = doc.NewElement("pubsub");
     pubSubNode->SetAttribute("xmlns", "http://jabber.org/protocol/pubsub");
@@ -204,8 +204,8 @@ void Device::subscribe_to_node(const std::string& nodeName) {
     tinyxml2::XMLDocument doc;
     tinyxml2::XMLElement* iqNode = doc.NewElement("iq");
     iqNode->SetAttribute("type", "set");
-    iqNode->SetAttribute("from", client->account.jid.getFull().c_str());
-    iqNode->SetAttribute("id", randFakeUuid().c_str());
+    iqNode->SetAttribute("from", client->account.jid.get_full().c_str());
+    iqNode->SetAttribute("id", generate_uuid_v4().c_str());
 
     tinyxml2::XMLElement* pubSubNode = doc.NewElement("pubsub");
     pubSubNode->SetAttribute("xmlns", "http://jabber.org/protocol/pubsub");
@@ -213,7 +213,7 @@ void Device::subscribe_to_node(const std::string& nodeName) {
 
     tinyxml2::XMLElement* subscribeNode = doc.NewElement("subscribe");
     subscribeNode->SetAttribute("node", nodeName.c_str());
-    subscribeNode->SetAttribute("jid", client->account.jid.getFull().c_str());
+    subscribeNode->SetAttribute("jid", client->account.jid.get_full().c_str());
     pubSubNode->InsertEndChild(subscribeNode);
 
     tinyxml2::XMLPrinter printer;
@@ -226,8 +226,8 @@ const std::string Device::gen_discover_nodes_message() const {
     tinyxml2::XMLDocument doc;
     tinyxml2::XMLElement* iqNode = doc.NewElement("iq");
     iqNode->SetAttribute("type", "get");
-    iqNode->SetAttribute("from", client->account.jid.getFull().c_str());
-    iqNode->SetAttribute("id", randFakeUuid().c_str());
+    iqNode->SetAttribute("from", client->account.jid.get_full().c_str());
+    iqNode->SetAttribute("id", generate_uuid_v4().c_str());
 
     tinyxml2::XMLElement* queryNode = doc.NewElement("query");
     queryNode->SetAttribute("xmlns", "http://jabber.org/protocol/disco#items");

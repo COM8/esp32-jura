@@ -30,6 +30,7 @@ set(SOURCES Esp32Jura.cpp
             xmpp/XmppClient.cpp
             xmpp/XmppConnection.cpp
             xmpp/XmppAccount.cpp
+            xmpp/Jid.cpp
             xmpp/XmppTask.cpp
             xmpp/XmppUtils.cpp
 
@@ -39,6 +40,11 @@ set(SOURCES Esp32Jura.cpp
             
             xmpp/messages/MessageParser.cpp
             xmpp/messages/Message.cpp
+
+            xmpp/messages/AbstractMessage.cpp
+            xmpp/messages/AbstractAddressableMessage.cpp
+            xmpp/messages/IQMessage.cpp
+            xmpp/messages/BindResourceMessage.cpp
 
             xmpp/messages/xep_iot/Device.cpp
             xmpp/messages/xep_iot/AbstractNode.cpp

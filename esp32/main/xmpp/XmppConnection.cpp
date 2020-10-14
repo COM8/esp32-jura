@@ -18,7 +18,7 @@ void XmppConnection::connect() {
 void XmppConnection::disconnect() { tcpConnection.disconnect(); }
 
 std::string XmppConnection::genInitialStreamHeader() {
-    return "<?xml version='1.0'?><stream:stream from='" + account->jid.getBare() + "' to='" + account->jid.domainPart +
+    return "<?xml version='1.0'?><stream:stream from='" + account->jid.get_bare() + "' to='" + account->jid.domainPart +
            "' version='1.0' xml:lang='en' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>";
 }
 
@@ -76,7 +76,7 @@ void XmppConnection::onSaslAuthRestartStreamHeaderReply(const tcp::XmppPacket& p
 
 void XmppConnection::onResourceBindingReply(const tcp::XmppPacket& packet) {
     std::string s = packet.to_string();
-    if (s.find(account->jid.getFull()) != std::string::npos) {
+    if (s.find(account->jid.get_full()) != std::string::npos) {
         std::string msg = genPresenceMessage();
         tcpConnection.send(msg);
         setState(CONNECTED);

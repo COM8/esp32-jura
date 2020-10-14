@@ -11,8 +11,8 @@ namespace esp32jura::xmpp::helpers {
 tinyxml2::XMLElement* PubSubHelper::gen_publish_item_node(tinyxml2::XMLDocument& doc, const xmpp::Jid& from, const char* nodeName, const char* itemId) {
     tinyxml2::XMLElement* iqNode = doc.NewElement("iq");
     iqNode->SetAttribute("type", "set");
-    iqNode->SetAttribute("from", from.getFull().c_str());
-    iqNode->SetAttribute("id", randFakeUuid().c_str());
+    iqNode->SetAttribute("from", from.get_full().c_str());
+    iqNode->SetAttribute("id", generate_uuid_v4().c_str());
     doc.InsertEndChild(iqNode);
 
     tinyxml2::XMLElement* pubsubNode = doc.NewElement("pubsub");

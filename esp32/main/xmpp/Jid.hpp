@@ -7,57 +7,37 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp {
 //---------------------------------------------------------------------------
-struct Jid {
-    const std::string userPart;
-    const std::string domainPart;
-    const std::string resourcePart;
+class Jid {
+   private:
+    const bool isValid{false};
 
-    Jid(std::string&& userPart, std::string&& domainPart, std::string&& resourcePart) : userPart(userPart), domainPart(domainPart), resourcePart(resourcePart) {}
+   public:
+    const std::string userPart{};
+    const std::string domainPart{};
+    const std::string resourcePart{};
 
-    [[nodiscard]] std::string getBare() const { return userPart + "@" + domainPart; }
+    Jid(std::string&& userPart, std::string&& domainPart, std::string&& resourcePart);
+    Jid(const Jid& other) = default;
+    Jid() = default;
+    Jid(Jid&& old) = default;
+    ~Jid() = default;
 
-    [[nodiscard]] std::string getFull() const { return getBare() + "/" + resourcePart; }
+    Jid& operator=(const Jid& other) = delete;
+    Jid& operator=(Jid&& old) = delete;
 
-    static void splitBareJid(const std::string& bareJid, std::string* userPart, std::string* domainPart) {
-        std::size_t pos = bareJid.find('@');
-        *userPart = bareJid.substr(0, pos);
-        *domainPart = bareJid.substr(pos + 1, bareJid.length() - pos);
-    }
+    [[nodiscard]] std::string get_bare() const;
+    [[nodiscard]] std::string get_full() const;
 
-    static void splitFullJid(const std::string& fullJid, std::string* userPart, std::string* domainPart, std::string* resourcePart) {
-        std::string tmp = "";
-        splitBareJid(fullJid, userPart, &tmp);
+    static void split_bare_jid(const std::string& bareJid, std::string* userPart, std::string* domainPart);
+    static void split_full_jid(const std::string& fullJid, std::string* userPart, std::string* domainPart, std::string* resourcePart);
+    static Jid&& from_bare_jid(const std::string& bareJid);
+    static Jid&& from_full_jid(const std::string& fullJid);
+    static Jid&& from_jid(const std::string& jid);
 
-        std::size_t pos = tmp.find('/');
-        *domainPart = tmp.substr(0, pos);
-        *resourcePart = tmp.substr(pos + 1, tmp.length() - pos);
-    }
-
-    static Jid&& fromBareJid(const std::string& bareJid) {
-        std::string userPart;
-        std::string domainPart;
-        std::string resourcePart = "";
-        splitBareJid(bareJid, &userPart, &domainPart);
-
-        return std::move(Jid(std::move(userPart), std::move(domainPart), std::move(resourcePart)));
-    }
-
-    static Jid&& fromFullJid(const std::string& fullJid) {
-        std::string userPart;
-        std::string domainPart;
-        std::string resourcePart;
-        splitFullJid(fullJid, &userPart, &domainPart, &resourcePart);
-
-        return std::move(Jid(std::move(userPart), std::move(domainPart), std::move(resourcePart)));
-    }
-
-    void print() const {
-        std::cout << "JID:\n";
-        std::cout << "User part: " << userPart << "\n";
-        std::cout << "Domain part: " << domainPart << "\n";
-        std::cout << "Resource part: " << resourcePart << "\n";
-        std::cout << getBare() << std::endl;
-    }
+    void print() const;
+    bool is_valid() const;
+    bool is_full() const;
+    bool is_bare() const;
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp
