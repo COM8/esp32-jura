@@ -173,6 +173,8 @@ void XmppTask::event(messages::Message& event) {
         handleMessageMessages(elem);
     } else if ((elem = doc.FirstChildElement("presence"))) {
         handlePresenceMessages(elem);
+    } else {
+        iotDevice->event(event);
     }
 }
 //---------------------------------------------------------------------------

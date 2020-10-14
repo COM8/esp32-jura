@@ -112,11 +112,6 @@ void Device::gen_ui_node(tinyxml2::XMLDocument& doc) {
 }
 
 void Device::event(messages::Message& event) {
-    on_discover_nodes_reply(event);
-    // on_create_node_reply(event);
-}
-
-void Device::on_discover_nodes_reply(messages::Message& event) {
     const tinyxml2::XMLDocument& doc = event.toXmlDoc();
     const tinyxml2::XMLElement* elem = doc.FirstChildElement("iq");
     if (!elem) {
@@ -151,8 +146,6 @@ void Device::on_discover_nodes_reply(messages::Message& event) {
     // Publish node values:
     publish_nodes();
 }
-
-void Device::on_create_node_reply(messages::Message& event) {}
 
 void Device::delete_node(const std::string& nodeName) {
     tinyxml2::XMLDocument doc;
@@ -252,9 +245,9 @@ void Device::on_pub_sub_event_message(const tinyxml2::XMLElement* elem) {
                 std::string nodeId = idAttrib->Value();
                 for (const std::unique_ptr<AbstractNode>& node : nodes) {
                     if (node->get_id() == nodeId) {
-                        if (node->on_value_changed(elem)) {
+                        /**if (node->on_value_changed(elem)) { // FIX ME, runs allways
                             publish_node(node);
-                        }
+                        }**/
                         std::cout << "Value for node '" << nodeId << "' updated to: '" << elem->ToText() << "'\n";
                         return;
                     }

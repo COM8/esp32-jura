@@ -49,9 +49,6 @@ class Device : public INonConstEventListener<messages::Message> {
    private:
     void gen_ui_node(tinyxml2::XMLDocument& doc);
     static tinyxml2::XMLElement* gen_node_config(tinyxml2::XMLDocument& doc);
-
-    void on_discover_nodes_reply(messages::Message& event);
-    void on_create_node_reply(messages::Message& event);
     const std::string gen_discover_nodes_message() const;
 };
 //---------------------------------------------------------------------------
