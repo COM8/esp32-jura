@@ -36,9 +36,9 @@ void XmppClient::setState(XmppClientConnectionState state) {
 
 XmppClientConnectionState XmppClient::getState() { return this->state; }
 
-void XmppClient::send(std::string& msg) { connection.send(msg); }
+void XmppClient::send(const std::string& msg) { connection.send(msg); }
 
-void XmppClient::send(std::wstring& msg) { connection.send(msg); }
+void XmppClient::send(const std::wstring& msg) { connection.send(msg); }
 
 void XmppClient::sendMessage(const std::string& to, const std::string& body) {
     std::string msg = "<message from='" + account.jid.getFull() + "' id='" + randFakeUuid() + "' to='" + to + "' type='chat' xml:lang='en'><body>" + body + "</body></message>";

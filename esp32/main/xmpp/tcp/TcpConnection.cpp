@@ -24,12 +24,12 @@ void TcpConnection::connect() {
     }
 }
 
-bool TcpConnection::send(std::string& msg) {
+bool TcpConnection::send(const std::string& msg) {
     std::cout << "Send: " << msg << "\n";
     return socket->send(static_cast<XmppPacket>(msg));
 }
 
-bool TcpConnection::send(std::wstring& msg) { return socket->send(static_cast<XmppPacket>(msg)); }
+bool TcpConnection::send(const std::wstring& msg) { return socket->send(static_cast<XmppPacket>(msg)); }
 
 void TcpConnection::disconnect() {}
 

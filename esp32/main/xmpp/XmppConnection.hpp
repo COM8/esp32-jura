@@ -35,8 +35,8 @@ class XmppConnection : public smooth::core::ipc::IEventListener<smooth::core::ne
 
     XmppConnection(const XmppAccount* account, smooth::core::Task& task, StateChangedListener& stateChangedListener, MessageListener& messageListener);
 
-    void send(std::string& msg);
-    void send(std::wstring& msg);
+    void send(const std::string& msg);
+    void send(const std::wstring& msg);
 
     [[nodiscard]] XmppConnectionState getState() const;
 

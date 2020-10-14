@@ -10,8 +10,8 @@ namespace esp32jura::xmpp::tcp {
 //---------------------------------------------------------------------------
 XmppPacket::XmppPacket(std::vector<uint8_t>& data) : data(data) {}
 
-XmppPacket::XmppPacket(std::wstring& data) : data(data.begin(), data.end()) {}
-XmppPacket::XmppPacket(std::string& data) : data(data.begin(), data.end()) {}
+XmppPacket::XmppPacket(const std::wstring& data) : data(data.begin(), data.end()) {}
+XmppPacket::XmppPacket(const std::string& data) : data(data.begin(), data.end()) {}
 
 int XmppPacket::get_send_length() { return static_cast<int>(data.size()); }
 

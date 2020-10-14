@@ -23,8 +23,8 @@ class XmppPacket : public smooth::core::network::IPacketDisassembly {
     XmppPacket(XmppPacket&&) = default;
 
     explicit XmppPacket(std::vector<uint8_t>& data);
-    explicit XmppPacket(std::wstring& data);
-    explicit XmppPacket(std::string& data);
+    explicit XmppPacket(const std::wstring& data);
+    explicit XmppPacket(const std::string& data);
 
     XmppPacket& operator=(const XmppPacket&) = default;
 

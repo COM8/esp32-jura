@@ -34,9 +34,9 @@ std::string XmppConnection::genResourceBindMessage() {
 
 std::string XmppConnection::genPresenceMessage() { return "<presence/>"; }
 
-void XmppConnection::send(std::string& msg) { tcpConnection.send(msg); }
+void XmppConnection::send(const std::string& msg) { tcpConnection.send(msg); }
 
-void XmppConnection::send(std::wstring& msg) { tcpConnection.send(msg); }
+void XmppConnection::send(const std::wstring& msg) { tcpConnection.send(msg); }
 
 void XmppConnection::setState(XmppConnectionState state) {
     if (state != this->state) {

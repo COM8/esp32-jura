@@ -22,7 +22,7 @@ XmppTask::XmppTask(std::shared_ptr<esp::Storage> storage)
       net_status(NetworkStatusQueue::create(2, *this, *this)),
       storage(std::move(storage)),
       client(nullptr),
-      pubSubHelper(nullptr) {}
+      iotDevice(nullptr) {}
 
 XmppTask::~XmppTask() {
     if (client) {
@@ -42,8 +42,8 @@ void XmppTask::init() {
     client = std::make_unique<xmpp::XmppClient>(std::move(account), *this, *this);
     client->subscribeToMessagesListener(this);
 
-    // Helpers:
-    pubSubHelper = std::make_unique<helpers::PubSubHelper>(client);
+    // IoT-Device:
+    iotDevice = std::make_unique<messages::xep_iot::Device>(client);
 }
 
 void XmppTask::tick() {
@@ -71,7 +71,7 @@ void XmppTask::event(const network::NetworkStatus& event) {
     }
 }
 
-void XmppTask::onReady() { pubSubHelper->start(); }
+void XmppTask::onReady() { iotDevice->init(); }
 
 void XmppTask::handlePresenceMessages(const tinyxml2::XMLElement* elem) {
     const tinyxml2::XMLAttribute* attrib = elem->FindAttribute("type");
@@ -105,59 +105,10 @@ void XmppTask::handleMessageMessages(const tinyxml2::XMLElement* elem) {
         }
     } else if ((tmp = elem->FirstChildElement("event"))) {
         if ((tmp = tmp->FirstChildElement("items"))) {
-            handlePubSubEventMessage(tmp);
+            iotDevice->on_pub_sub_event_message(tmp);
         }
     }
 }
-
-void XmppTask::handlePubSubEventMessage(const tinyxml2::XMLElement* elem) {
-    const tinyxml2::XMLAttribute* nodeAttrib = elem->FindAttribute("node");
-    if (nodeAttrib && (elem = elem->FirstChildElement("item"))) {
-        const tinyxml2::XMLAttribute* idAttrib = elem->FindAttribute("id");
-        if (idAttrib && (elem = elem->FirstChildElement("val"))) {
-            if (!strcmp(nodeAttrib->Value(), pubSubHelper->XMPP_IOT_ACTUATORS.c_str())) {
-                std::string name = idAttrib->Value();
-                bool val = elem->BoolText();
-                if (!val) {
-                    std::string status = "Value of node " + name + " set to: " + std::to_string(val);
-                    pubSubHelper->publishStatusNode(status);
-                    return;
-                }
-
-                if (name == pubSubHelper->XMPP_IOT_ACTUATOR_ESPRESSO) {
-                    pubSubHelper->publishStatusNode("Brewing espresso.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::ESPRESSO);
-                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_COFFEE) {
-                    pubSubHelper->publishStatusNode("Brewing coffee.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::COFFEE);
-                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_CAPPUCCINO) {
-                    pubSubHelper->publishStatusNode("Brewing cappuccino.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::CAPPUCCINO);
-                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_MILK_FOAM) {
-                    pubSubHelper->publishStatusNode("Making milk foam.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::MILK_FOAM);
-                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_CAFFE_BARISTA) {
-                    pubSubHelper->publishStatusNode("Brewing caffe barista.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::CAFFE_BARISTA);
-                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_LUNGO_BARISTA) {
-                    pubSubHelper->publishStatusNode("Brewing lungo barista.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::LUNGO_BARISTA);
-                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_ESPRESSO_DOPPIO) {
-                    pubSubHelper->publishStatusNode("Brewing espresso doppio.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::ESPRESSO_DOPPIO);
-                } else if (name == pubSubHelper->XMPP_IOT_ACTUATOR_MACCHIATO) {
-                    pubSubHelper->publishStatusNode("Brewing macchiato.");
-                    coffeeMaker.brew_coffee(jura::CoffeeMaker::coffee_t::MACCHIATO);
-                } else {
-                    std::string status = "You selected: " + name;
-                    pubSubHelper->publishStatusNode(status);
-                }
-                std::cout << name << " value updated to: " << val << "\n";
-                pubSubHelper->publishCoffeeNode(name, false);
-            }
-        }
-    }
-}  // namespace esp32jura::xmpp
 
 void XmppTask::handleIoTMessageMessage(const char* msg) {
     /*#ifdef SPEAKER

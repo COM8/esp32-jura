@@ -10,10 +10,10 @@
 
 #include "INonConstEventListener.hpp"
 #include "esp/Storage.hpp"
-#include "helpers/PubSubHelper.hpp"
 #include "jura/CoffeeMaker.hpp"
 #include "messages/Message.hpp"
 #include "xmpp/XmppClient.hpp"
+#include "xmpp/messages/xep_iot/Device.hpp"
 
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp {
@@ -29,7 +29,7 @@ class XmppTask : public smooth::core::Task,
     std::shared_ptr<esp::Storage> storage;
 
     std::shared_ptr<xmpp::XmppClient> client;
-    std::unique_ptr<helpers::PubSubHelper> pubSubHelper;
+    std::unique_ptr<messages::xep_iot::Device> iotDevice;
 
     static const std::string INITIAL_HELLO_MESSAGE;
 
@@ -51,7 +51,6 @@ class XmppTask : public smooth::core::Task,
    private:
     void onReady();
     void handleIoTMessageMessage(const char* msg);
-    void handlePubSubEventMessage(const tinyxml2::XMLElement* elem);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp

@@ -43,8 +43,8 @@ class TcpConnection : public smooth::core::ipc::IEventListener<smooth::core::net
     void connect();
     void disconnect();
 
-    bool send(std::string& msg);
-    bool send(std::wstring& msg);
+    bool send(const std::string& msg);
+    bool send(const std::wstring& msg);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::tcp
