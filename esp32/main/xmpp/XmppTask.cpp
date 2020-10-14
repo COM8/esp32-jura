@@ -9,6 +9,10 @@
 
 #include "xmpp/Jid.hpp"
 #include "xmpp/XmppAccount.hpp"
+#include "xmpp/messages/xep_iot/AbstractNode.hpp"
+#include "xmpp/messages/xep_iot/ButtonNode.hpp"
+#include "xmpp/messages/xep_iot/TextFixedNode.hpp"
+#include "xmpp/messages/xep_iot/TextSingleNode.hpp"
 
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp {
@@ -44,6 +48,34 @@ void XmppTask::init() {
 
     // IoT-Device:
     iotDevice = std::make_unique<messages::xep_iot::Device>(client);
+    add_text_fixed("xmpp.iot.sensor.text.general", "General:");
+    add_button("xmpp.iot.actuator.coffee", "Coffee");
+    add_button("xmpp.iot.actuator.espresso", "Espresso");
+    add_button("xmpp.iot.actuator.cappuccino", "Cappuccino");
+    add_button("xmpp.iot.actuator.mild_foam", "Milk foam");
+    add_button("xmpp.iot.actuator.caffe_barista", "Caffe Barista");
+    add_button("xmpp.iot.actuator.lungo_barista", "Lungo Barista");
+    add_button("xmpp.iot.actuator.espresso_doppio", "Espresso doppio");
+    add_button("xmpp.iot.actuator.macciato", "Macciato");
+    add_text_fixed("xmpp.iot.sensor.text.custom", "Custom:");
+    add_button("xmpp.iot.actuator.brew", "Brew");
+    add_text_fixed("xmpp.iot.sensor.text.info", "Info:");
+    add_text_fixed("xmpp.iot.sensor.text.machine", "Machine: TUM Jutta E6");
+}
+
+void XmppTask::add_button(const std::string&& id, const std::string&& label) {
+    std::unique_ptr<messages::xep_iot::ButtonNode> button = std::make_unique<messages::xep_iot::ButtonNode>(std::move(id), std::move(label));
+    iotDevice->add_node(std::move(button));
+}
+
+void XmppTask::add_text_single(const std::string&& id, std::string&& text) {
+    std::unique_ptr<messages::xep_iot::TextSingleNode> textSingle = std::make_unique<messages::xep_iot::TextSingleNode>(std::move(id), std::move(text));
+    iotDevice->add_node(std::move(textSingle));
+}
+
+void XmppTask::add_text_fixed(const std::string&& id, std::string&& text) {
+    std::unique_ptr<messages::xep_iot::TextFixedNode> textFixed = std::make_unique<messages::xep_iot::TextFixedNode>(std::move(id), std::move(text));
+    iotDevice->add_node(std::move(textFixed));
 }
 
 void XmppTask::tick() {

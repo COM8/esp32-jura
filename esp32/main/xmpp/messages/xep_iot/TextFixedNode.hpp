@@ -9,11 +9,13 @@ namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
 class TextFixedNode : public SensorNode {
    private:
-    const std::string text;
+    std::string text;
 
    public:
-    TextFixedNode(const std::string&& id, const std::string&& text);
+    TextFixedNode(const std::string&& id, std::string&& text);
     ~TextFixedNode() override = default;
+
+    bool on_value_changed(const tinyxml2::XMLElement* valNode) override;
 
    protected:
     virtual Type get_type() const override;
