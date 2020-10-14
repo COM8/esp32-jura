@@ -1,10 +1,10 @@
 #pragma once
 
 // #define MODE_SNOOPER
-#define MODE_COFFEE_MAKER
+// #define MODE_COFFEE_MAKER
 // #define MODE_BRIDGE
 // #define MODE_SERIAL
-// #define MODE_XMPP
+#define MODE_XMPP
 
 #include <smooth/core/Application.h>
 

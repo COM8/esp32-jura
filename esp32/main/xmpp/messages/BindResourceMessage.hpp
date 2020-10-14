@@ -15,7 +15,7 @@ class BindResourceMessage : public IQMessage {
 
    public:
     BindResourceMessage(const std::string&& resource);
-    ~BindResourceMessage() = default;
+    virtual ~BindResourceMessage() = default;
 
     MessageType get_type() override;
 

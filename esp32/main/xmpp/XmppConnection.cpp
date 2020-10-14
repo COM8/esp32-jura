@@ -1,6 +1,10 @@
 #include "XmppConnection.hpp"
 
+#include <cassert>
+
+#include "XmppUtils.hpp"
 #include "crypto/CryptoUtils.hpp"
+#include "xmpp/messages/BindResourceMessage.hpp"
 
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp {
@@ -29,7 +33,10 @@ std::string XmppConnection::genPlainAuthMessage() {
 }
 
 std::string XmppConnection::genResourceBindMessage() {
-    return "<iq id='yhc13a95' type='set'><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'><resource>" + account->jid.resourcePart + "</resource></bind></iq>";
+    assert(account->jid.is_full());
+    std::string resource = account->jid.resourcePart;
+    messages::BindResourceMessage msg(std::move(resource));
+    return msg.to_xml_str();
 }
 
 std::string XmppConnection::genPresenceMessage() { return "<presence/>"; }

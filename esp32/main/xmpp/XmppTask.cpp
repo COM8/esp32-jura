@@ -4,6 +4,7 @@
 #include <smooth/core/task_priorities.h>
 #include <tinyxml2.h>
 
+#include <cassert>
 #include <iostream>
 #include <string>
 
@@ -41,6 +42,8 @@ void XmppTask::init() {
     // XMPP:
     std::string jidString = storage->readString(esp::Storage::JID);
     xmpp::Jid jid = xmpp::Jid::from_full_jid(jidString);
+    assert(jid.is_full());
+
     std::string password = storage->readString(esp::Storage::JID_PASSWORD);
     xmpp::XmppAccount account(std::move(jid), std::move(password), std::make_shared<smooth::core::network::IPv4>(jid.domainPart, 5222));
     client = std::make_unique<xmpp::XmppClient>(std::move(account), *this, *this);

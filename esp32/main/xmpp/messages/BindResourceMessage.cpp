@@ -7,7 +7,7 @@ namespace esp32jura::xmpp::messages {
 //---------------------------------------------------------------------------
 BindResourceMessage::BindResourceMessage(const std::string&& resource) : IQMessage(IQType::SET), resource(std::move(resource)) {}
 
-MessageType IQMessage::get_type() { return MessageType::BindResourceMessageType; }
+MessageType BindResourceMessage::get_type() { return MessageType::BindResourceMessageType; }
 
 tinyxml2::XMLElement* BindResourceMessage::get_query(tinyxml2::XMLDocument& doc) const {
     tinyxml2::XMLElement* bindNode = doc.NewElement("bind");

@@ -16,7 +16,7 @@ class AbstractAddressableMessage : public AbstractMessage {
    public:
     AbstractAddressableMessage(const Jid from, const Jid to);
     AbstractAddressableMessage(const Jid from, const Jid to, const std::string&& id);
-    ~AbstractAddressableMessage() = default;
+    virtual ~AbstractAddressableMessage() = default;
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::messages

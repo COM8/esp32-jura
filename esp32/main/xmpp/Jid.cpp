@@ -4,7 +4,7 @@
 namespace esp32jura::xmpp {
 //---------------------------------------------------------------------------
 Jid::Jid(std::string&& userPart, std::string&& domainPart, std::string&& resourcePart)
-    : isValid(!userPart.empty() && domainPart.empty()), userPart(std::move(userPart)), domainPart(std::move(domainPart)), resourcePart(std::move(resourcePart)) {}
+    : isValid(!userPart.empty() && !domainPart.empty()), userPart(std::move(userPart)), domainPart(std::move(domainPart)), resourcePart(std::move(resourcePart)) {}
 
 std::string Jid::get_bare() const { return userPart + "@" + domainPart; }
 
@@ -21,8 +21,12 @@ void Jid::split_full_jid(const std::string& fullJid, std::string* userPart, std:
     split_bare_jid(fullJid, userPart, &tmp);
 
     std::size_t pos = tmp.find('/');
-    *domainPart = tmp.substr(0, pos);
-    *resourcePart = tmp.substr(pos + 1, tmp.length() - pos);
+    if (pos != std::string::npos) {
+        *domainPart = tmp.substr(0, pos);
+        *resourcePart = tmp.substr(pos + 1, tmp.length() - pos);
+    } else {
+        *domainPart = tmp;
+    }
 }
 
 Jid&& Jid::from_bare_jid(const std::string& bareJid) {

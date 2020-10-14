@@ -22,7 +22,7 @@ class IQMessage : public AbstractAddressableMessage {
     IQMessage(const std::string&& id, IQType iqType);
     IQMessage(IQType iqType);
     IQMessage(const tinyxml2::XMLElement* node);
-    ~IQMessage() = default;
+    virtual ~IQMessage() = default;
 
     MessageType get_type() override;
 
