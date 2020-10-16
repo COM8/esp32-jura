@@ -77,10 +77,10 @@ class CoffeeMaker {
     void brew_coffee(coffee_t coffee);
     /**
      * Brews a custom coffee with the given grind and water times.
-     * A default coffee on a JURA E6 (2019) grinds for 3 seconds and then lets the water run for 40 seconds (200 ml).
+     * A default coffee on a JURA E6 (2019) grinds for 3.5 seconds and then lets the water run for 40 seconds (200 ml).
      * This corresponds to a water flow rate of 5 ml/s.
      **/
-    void brew_custom_coffee(const std::chrono::milliseconds grindTime = std::chrono::milliseconds{3000}, const std::chrono::milliseconds waterTime = std::chrono::milliseconds{40000});
+    void brew_custom_coffee(const std::chrono::milliseconds grindTime = std::chrono::milliseconds{3500}, const std::chrono::milliseconds waterTime = std::chrono::milliseconds{40000});
     /**
      * Simulates a button press of the given button.
      **/
