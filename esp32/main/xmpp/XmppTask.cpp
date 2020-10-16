@@ -13,6 +13,7 @@
 #include "xmpp/messages/xep_iot/AbstractNode.hpp"
 #include "xmpp/messages/xep_iot/ButtonNode.hpp"
 #include "xmpp/messages/xep_iot/HeaderNode.hpp"
+#include "xmpp/messages/xep_iot/SliderNode.hpp"
 #include "xmpp/messages/xep_iot/TextSingleNode.hpp"
 
 //---------------------------------------------------------------------------
@@ -61,6 +62,8 @@ void XmppTask::init() {
     add_button("xmpp.iot.actuator.espresso_doppio", "Espresso doppio");
     add_button("xmpp.iot.actuator.macciato", "Macciato");
     add_header("xmpp.iot.sensor.text.custom", "Custom:");
+    add_slider("xmpp.iot.sensor.text.water", "Water:", 0, 200, 100, 1);
+    add_slider("xmpp.iot.sensor.text.beans", "Beans:", 0, 200, 100, 1);
     add_button("xmpp.iot.actuator.brew", "Brew");
     add_header("xmpp.iot.sensor.text.info", "Info:");
     add_text_single("xmpp.iot.sensor.text.machine", "Machine:", "TUM Jutta E6", true);
@@ -79,6 +82,11 @@ void XmppTask::add_text_single(std::string&& id, std::string&& label, std::strin
 void XmppTask::add_header(std::string&& id, std::string&& text) {
     std::unique_ptr<messages::xep_iot::HeaderNode> header = std::make_unique<messages::xep_iot::HeaderNode>(std::move(id), std::move(text));
     iotDevice->add_node(std::move(header));
+}
+
+void XmppTask::add_slider(std::string&& id, std::string&& label, double min, double max, double value, double steps) {
+    std::unique_ptr<messages::xep_iot::SliderNode> slider = std::make_unique<messages::xep_iot::SliderNode>(std::move(id), std::move(label), min, max, value, steps);
+    iotDevice->add_node(std::move(slider));
 }
 
 void XmppTask::tick() {

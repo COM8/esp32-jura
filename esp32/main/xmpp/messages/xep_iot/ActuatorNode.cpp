@@ -16,10 +16,12 @@ void ActuatorNode::gen_actuator_node(tinyxml2::XMLDocument& doc, const xmpp::Jid
     tinyxml2::XMLElement* valNode = doc.NewElement("val");
     valNode->SetAttribute("xmlns", iot_ns.c_str());
     valNode->SetAttribute("type", fieldType.c_str());
-    // valNode->SetAttribute("unit", "");  // Not needed here
     valNode->SetText(get_value_str().c_str());
+    on_gen_val_node(valNode);
     itemNode->InsertEndChild(valNode);
 }
+
+void ActuatorNode::on_gen_val_node(tinyxml2::XMLElement* valNode) const {};
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::messages::xep_iot
 //---------------------------------------------------------------------------

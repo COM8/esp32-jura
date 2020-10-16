@@ -12,7 +12,7 @@ namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
 enum NodeType { SENSOR = 0, ACTUATOR = 1 };
 
-enum Type { ButtonNodeType = 0, HeaderNodeType = 1, TextSingleNodeType = 2 };
+enum Type { ButtonNodeType = 0, HeaderNodeType = 1, TextSingleNodeType = 2, SliderNodeType = 3 };
 
 class AbstractNode {
    protected:
