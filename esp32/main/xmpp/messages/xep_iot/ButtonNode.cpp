@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
-ButtonNode::ButtonNode(const std::string&& id, const std::string&& title) : ActuatorNode(std::move(id), "button"), title(std::move(title)) {}
+ButtonNode::ButtonNode(std::string&& id, std::string&& title) : ActuatorNode(std::move(id), "button"), title(std::move(title)) {}
 
 Type ButtonNode::get_type() const { return Type::ButtonNodeType; }
 

@@ -17,9 +17,9 @@ class IQMessage : public AbstractAddressableMessage {
     const IQType iqType;
 
    public:
-    IQMessage(const Jid from, const Jid to, IQType iqType, const std::string&& id);
+    IQMessage(const Jid from, const Jid to, IQType iqType, std::string&& id);
     IQMessage(const Jid from, const Jid to, IQType iqType);
-    IQMessage(const std::string&& id, IQType iqType);
+    IQMessage(std::string&& id, IQType iqType);
     IQMessage(IQType iqType);
     IQMessage(const tinyxml2::XMLElement* node);
     virtual ~IQMessage() = default;

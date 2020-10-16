@@ -12,7 +12,7 @@ class TextSingleNode : public SensorNode {
     bool readonly;
 
    public:
-    TextSingleNode(const std::string&& id, std::string&& label, std::string&& text, bool readonly);
+    TextSingleNode(std::string&& id, std::string&& label, std::string&& text, bool readonly);
     ~TextSingleNode() override = default;
 
     bool on_value_changed(const tinyxml2::XMLElement* valNode) override;

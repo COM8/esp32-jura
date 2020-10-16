@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
-HeaderNode::HeaderNode(const std::string&& id, std::string&& text) : SensorNode(std::move(id), "header", "", false), text(std::move(text)) {}
+HeaderNode::HeaderNode(std::string&& id, std::string&& text) : SensorNode(std::move(id), "header", "", false), text(std::move(text)) {}
 
 Type HeaderNode::get_type() const { return Type::HeaderNodeType; }
 

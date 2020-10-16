@@ -14,7 +14,7 @@ class SensorNode : public AbstractNode {
     static const std::string XMPP_IOT_SENSORS;
 
    public:
-    SensorNode(const std::string&& id, const std::string&& fieldType, const std::string&& unit, bool hasValue = true);
+    SensorNode(std::string&& id, std::string&& fieldType, std::string&& unit, bool hasValue = true);
     ~SensorNode() override = default;
 
     void gen_sensor_node(tinyxml2::XMLDocument& doc, const xmpp::Jid& from, const std::string& iot_ns) const;

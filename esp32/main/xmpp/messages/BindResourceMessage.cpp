@@ -5,7 +5,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp::messages {
 //---------------------------------------------------------------------------
-BindResourceMessage::BindResourceMessage(const std::string&& resource) : IQMessage(IQType::SET), resource(std::move(resource)) {}
+BindResourceMessage::BindResourceMessage(std::string&& resource) : IQMessage(IQType::SET), resource(std::move(resource)) {}
 
 MessageType BindResourceMessage::get_type() { return MessageType::BindResourceMessageType; }
 

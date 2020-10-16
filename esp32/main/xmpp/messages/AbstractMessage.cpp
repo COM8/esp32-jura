@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp::messages {
 //---------------------------------------------------------------------------
-AbstractMessage::AbstractMessage(const std::string&& id) : id(std::move(id)) {}
+AbstractMessage::AbstractMessage(std::string&& id) : id(std::move(id)) {}
 
 std::string AbstractMessage::to_xml_str() const {
     tinyxml2::XMLPrinter printer;

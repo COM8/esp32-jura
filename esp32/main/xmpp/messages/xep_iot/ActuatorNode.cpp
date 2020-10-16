@@ -7,7 +7,7 @@ namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
 const std::string ActuatorNode::XMPP_IOT_ACTUATORS = "xmpp.iot.actuators";
 
-ActuatorNode::ActuatorNode(const std::string&& id, const std::string&& fieldType) : AbstractNode(std::move(id), std::move(fieldType)) {}
+ActuatorNode::ActuatorNode(std::string&& id, std::string&& fieldType) : AbstractNode(std::move(id), std::move(fieldType)) {}
 
 NodeType ActuatorNode::get_node_type() const { return NodeType::ACTUATOR; }
 

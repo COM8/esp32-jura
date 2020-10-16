@@ -12,7 +12,7 @@ class ButtonNode : public ActuatorNode {
     const std::string title;
 
    public:
-    ButtonNode(const std::string&& id, const std::string&& title);
+    ButtonNode(std::string&& id, std::string&& title);
     ~ButtonNode() override = default;
 
     const std::string get_value_str() const override;

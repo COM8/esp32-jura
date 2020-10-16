@@ -19,7 +19,7 @@ class AbstractMessage {
     Restart restart{Restart::NO_RESTART};
 
    public:
-    AbstractMessage(const std::string&& id = generate_uuid_v4());
+    AbstractMessage(std::string&& id = generate_uuid_v4());
     ~AbstractMessage() = default;
 
    protected:

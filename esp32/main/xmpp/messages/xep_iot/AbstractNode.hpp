@@ -20,7 +20,7 @@ class AbstractNode {
     const std::string fieldType;
 
    public:
-    AbstractNode(const std::string&& id, const std::string&& fieldType);
+    AbstractNode(std::string&& id, std::string&& fieldType);
     virtual ~AbstractNode() = default;
 
     virtual NodeType get_node_type() const = 0;

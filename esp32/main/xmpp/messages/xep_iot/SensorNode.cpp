@@ -10,8 +10,7 @@ namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
 const std::string SensorNode::XMPP_IOT_SENSORS = "xmpp.iot.sensors";
 
-SensorNode::SensorNode(const std::string&& id, const std::string&& fieldType, const std::string&& unit, bool hasValue)
-    : AbstractNode(std::move(id), std::move(fieldType)), unit(std::move(unit)), hasValue(hasValue) {}
+SensorNode::SensorNode(std::string&& id, std::string&& fieldType, std::string&& unit, bool hasValue) : AbstractNode(std::move(id), std::move(fieldType)), unit(std::move(unit)), hasValue(hasValue) {}
 
 NodeType SensorNode::get_node_type() const { return NodeType::SENSOR; }
 

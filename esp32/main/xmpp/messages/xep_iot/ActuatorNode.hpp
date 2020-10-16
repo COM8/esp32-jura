@@ -11,7 +11,7 @@ class ActuatorNode : public AbstractNode {
     static const std::string XMPP_IOT_ACTUATORS;
 
    public:
-    ActuatorNode(const std::string&& id, const std::string&& fieldType);
+    ActuatorNode(std::string&& id, std::string&& fieldType);
     ~ActuatorNode() override = default;
 
     void gen_actuator_node(tinyxml2::XMLDocument& doc, const xmpp::Jid& from, const std::string& iot_ns) const;

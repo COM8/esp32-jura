@@ -18,7 +18,7 @@ class XmppAccount {
     const std::string password;
     InetAddress_sp server;
 
-    XmppAccount(const Jid&& jid, const std::string&& password, const InetAddress_sp server);
+    XmppAccount(const Jid&& jid, std::string&& password, const InetAddress_sp server);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp

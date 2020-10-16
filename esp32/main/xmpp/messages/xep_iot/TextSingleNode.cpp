@@ -3,7 +3,7 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
-TextSingleNode::TextSingleNode(const std::string&& id, std::string&& label, std::string&& text, bool readonly)
+TextSingleNode::TextSingleNode(std::string&& id, std::string&& label, std::string&& text, bool readonly)
     : SensorNode(std::move(id), "text-single", ""), label(std::move(label)), text(std::move(text)), readonly(readonly) {}
 
 Type TextSingleNode::get_type() const { return Type::TextSingleNodeType; }

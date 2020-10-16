@@ -66,17 +66,17 @@ void XmppTask::init() {
     add_text_single("xmpp.iot.sensor.text.machine", "Machine:", "TUM Jutta E6", true);
 }
 
-void XmppTask::add_button(const std::string&& id, const std::string&& label) {
+void XmppTask::add_button(std::string&& id, std::string&& label) {
     std::unique_ptr<messages::xep_iot::ButtonNode> button = std::make_unique<messages::xep_iot::ButtonNode>(std::move(id), std::move(label));
     iotDevice->add_node(std::move(button));
 }
 
-void XmppTask::add_text_single(const std::string&& id, std::string&& label, std::string&& text, bool readonly) {
+void XmppTask::add_text_single(std::string&& id, std::string&& label, std::string&& text, bool readonly) {
     std::unique_ptr<messages::xep_iot::TextSingleNode> textSingle = std::make_unique<messages::xep_iot::TextSingleNode>(std::move(id), std::move(label), std::move(text), readonly);
     iotDevice->add_node(std::move(textSingle));
 }
 
-void XmppTask::add_header(const std::string&& id, std::string&& text) {
+void XmppTask::add_header(std::string&& id, std::string&& text) {
     std::unique_ptr<messages::xep_iot::HeaderNode> header = std::make_unique<messages::xep_iot::HeaderNode>(std::move(id), std::move(text));
     iotDevice->add_node(std::move(header));
 }

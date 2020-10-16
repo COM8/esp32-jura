@@ -6,11 +6,11 @@
 //---------------------------------------------------------------------------
 namespace esp32jura::xmpp::messages {
 //---------------------------------------------------------------------------
-IQMessage::IQMessage(const Jid from, const Jid to, IQType iqType, const std::string&& id) : AbstractAddressableMessage(from, to, std::move(id)), iqType(iqType) {}
+IQMessage::IQMessage(const Jid from, const Jid to, IQType iqType, std::string&& id) : AbstractAddressableMessage(from, to, std::move(id)), iqType(iqType) {}
 
 IQMessage::IQMessage(const Jid from, const Jid to, IQType iqType) : AbstractAddressableMessage(from, to), iqType(iqType) {}
 
-IQMessage::IQMessage(const std::string&& id, IQType iqType) : AbstractAddressableMessage(Jid(), Jid(), std::move(id)), iqType(iqType) {}
+IQMessage::IQMessage(std::string&& id, IQType iqType) : AbstractAddressableMessage(Jid(), Jid(), std::move(id)), iqType(iqType) {}
 
 IQMessage::IQMessage(IQType iqType) : AbstractAddressableMessage(Jid(), Jid()), iqType(iqType) {}
 

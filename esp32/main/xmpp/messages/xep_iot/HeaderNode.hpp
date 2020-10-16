@@ -10,7 +10,7 @@ class HeaderNode : public SensorNode {
     std::string text;
 
    public:
-    HeaderNode(const std::string&& id, std::string&& text);
+    HeaderNode(std::string&& id, std::string&& text);
     ~HeaderNode() override = default;
 
     bool on_value_changed(const tinyxml2::XMLElement* valNode) override;

@@ -15,7 +15,7 @@ class AbstractAddressableMessage : public AbstractMessage {
 
    public:
     AbstractAddressableMessage(const Jid from, const Jid to);
-    AbstractAddressableMessage(const Jid from, const Jid to, const std::string&& id);
+    AbstractAddressableMessage(const Jid from, const Jid to, std::string&& id);
     virtual ~AbstractAddressableMessage() = default;
 };
 //---------------------------------------------------------------------------
