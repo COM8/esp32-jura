@@ -53,8 +53,8 @@ class XmppTask : public smooth::core::Task,
     void handleIoTMessageMessage(const char* msg);
 
     void add_button(const std::string&& id, const std::string&& label);
-    void add_text_single(const std::string&& id, std::string&& text);
-    void add_text_fixed(const std::string&& id, std::string&& text);
+    void add_text_single(const std::string&& id, std::string&& label, std::string&& text, bool readonly);
+    void add_header(const std::string&& id, std::string&& text);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp

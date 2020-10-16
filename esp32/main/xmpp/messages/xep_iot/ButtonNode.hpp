@@ -10,7 +10,6 @@ namespace esp32jura::xmpp::messages::xep_iot {
 class ButtonNode : public ActuatorNode {
    private:
     const std::string title;
-    std::string value{"0"};
 
    public:
     ButtonNode(const std::string&& id, const std::string&& title);

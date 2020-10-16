@@ -7,10 +7,12 @@ namespace esp32jura::xmpp::messages::xep_iot {
 //---------------------------------------------------------------------------
 class TextSingleNode : public SensorNode {
    private:
+    std::string label;
     std::string text;
+    bool readonly;
 
    public:
-    TextSingleNode(const std::string&& id, std::string&& text);
+    TextSingleNode(const std::string&& id, std::string&& label, std::string&& text, bool readonly);
     ~TextSingleNode() override = default;
 
     bool on_value_changed(const tinyxml2::XMLElement* valNode) override;

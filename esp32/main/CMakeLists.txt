@@ -51,7 +51,7 @@ set(SOURCES Esp32Jura.cpp
             xmpp/messages/xep_iot/SensorNode.cpp
             xmpp/messages/xep_iot/ActuatorNode.cpp
             xmpp/messages/xep_iot/ButtonNode.cpp
-            xmpp/messages/xep_iot/TextFixedNode.cpp
+            xmpp/messages/xep_iot/HeaderNode.cpp
             xmpp/messages/xep_iot/TextSingleNode.cpp
             
             xmpp/crypto/CryptoUtils.cpp

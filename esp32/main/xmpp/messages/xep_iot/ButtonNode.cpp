@@ -12,12 +12,9 @@ void ButtonNode::to_ui_field(tinyxml2::XMLDocument& doc, tinyxml2::XMLElement* x
     xNode->InsertEndChild(node);
 }
 
-const std::string ButtonNode::get_value_str() const { return value; }
+const std::string ButtonNode::get_value_str() const { return "0"; }
 
-bool ButtonNode::on_value_changed(const tinyxml2::XMLElement* valNode) {
-    value = std::string{valNode->GetText()} == "0" ? "1" : "0";
-    return true;
-}
+bool ButtonNode::on_value_changed(const tinyxml2::XMLElement* valNode) { return std::string{valNode->GetText()} != "0"; }
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::messages::xep_iot
 //---------------------------------------------------------------------------

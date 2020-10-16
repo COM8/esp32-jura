@@ -82,14 +82,16 @@ void Device::publish_node(const ActuatorNode* node) {
 }
 
 void Device::publish_node(const SensorNode* node) {
-    tinyxml2::XMLDocument doc;
-    node->gen_sensor_node(doc, client->account.jid, XMPP_IOT_NAMESPACE);
+    if (node->hasValue) {
+        tinyxml2::XMLDocument doc;
+        node->gen_sensor_node(doc, client->account.jid, XMPP_IOT_NAMESPACE);
 
-    tinyxml2::XMLPrinter printer;
-    doc.FirstChild()->Accept(&printer);
-    std::string msg{printer.CStr()};
-    client->send(msg);
-    std::cout << "Sensor node '" << node->get_id() << "' updated.\n";
+        tinyxml2::XMLPrinter printer;
+        doc.FirstChild()->Accept(&printer);
+        std::string msg{printer.CStr()};
+        client->send(msg);
+        std::cout << "Sensor node '" << node->get_id() << "' updated.\n";
+    }
 }
 
 void Device::gen_ui_node(tinyxml2::XMLDocument& doc) {
@@ -245,9 +247,9 @@ void Device::on_pub_sub_event_message(const tinyxml2::XMLElement* elem) {
                 std::string nodeId = idAttrib->Value();
                 for (const std::unique_ptr<AbstractNode>& node : nodes) {
                     if (node->get_id() == nodeId) {
-                        /**if (node->on_value_changed(elem)) { // FIX ME, runs allways
+                        if (node->on_value_changed(elem)) {
                             publish_node(node);
-                        }**/
+                        }
                         std::cout << "Value for node '" << nodeId << "' updated to: '" << elem->ToText() << "'\n";
                         return;
                     }
@@ -262,7 +264,7 @@ tinyxml2::XMLElement* Device::gen_node_config(tinyxml2::XMLDocument& doc) {
     xNode->SetAttribute("xmlns", "jabber:x:data");
     xNode->SetAttribute("type", "submit");
 
-    xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "FORM_TYPE", "hidden", "http://jabber.org/protocol/pubsub#publish-options", nullptr));
+    xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "FORM_TYPE", "hidden", "http://jabber.org/protocol/pubsub#node_config", nullptr));
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#persist_items", nullptr, "true", nullptr));
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#access_model", nullptr, "open", nullptr));   // Perhaps replace with "presence"
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#publish_model", nullptr, "open", nullptr));  // Perhaps replace with "subscribers"
