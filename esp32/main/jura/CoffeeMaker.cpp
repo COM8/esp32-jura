@@ -145,8 +145,11 @@ void CoffeeMaker::pump_hot_water(const std::chrono::milliseconds waterTime) {
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now() + waterTime;
     while (std::chrono::steady_clock::now() < end) {
         write_and_wait(JURA_COFFEE_WATER_HEATER_ON);
-        std::this_thread::sleep_for(waterTime / 6);
+        std::cout << "Heater turned on.\n";
+        std::this_thread::sleep_for(waterTime / 8);
         write_and_wait(JURA_COFFEE_WATER_HEATER_OFF);
+        std::cout << "Heater turned off.\n";
+        std::this_thread::sleep_for(waterTime / 20);
     }
     write_and_wait(JURA_COFFEE_WATER_PUMP_OFF);
 }
