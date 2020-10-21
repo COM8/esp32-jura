@@ -77,10 +77,10 @@ class CoffeeMaker {
     void brew_coffee(coffee_t coffee);
     /**
      * Brews a custom coffee with the given grind and water times.
-     * A default coffee on a JURA E6 (2019) grinds for 3.5 seconds and then lets the water run for 40 seconds (200 ml).
+     * A default coffee on a JURA E6 (2019) grinds for 3.6 seconds and then lets the water run for 40 seconds (200 ml).
      * This corresponds to a water flow rate of 5 ml/s.
      **/
-    void brew_custom_coffee(const std::chrono::milliseconds grindTime = std::chrono::milliseconds{3500}, const std::chrono::milliseconds waterTime = std::chrono::milliseconds{40000});
+    void brew_custom_coffee(const std::chrono::milliseconds grindTime = std::chrono::milliseconds{3600}, const std::chrono::milliseconds waterTime = std::chrono::milliseconds{40000});
     /**
      * Simulates a button press of the given button.
      **/
@@ -100,6 +100,10 @@ class CoffeeMaker {
      * Writes the given string to the coffee maker and waits for an "ok:\r\n"
      **/
     bool write_and_wait(const std::string s);
+    /**
+     * Turns on the water pump and heater for the given amount of time.
+     **/
+    void pump_hot_water(const std::chrono::milliseconds waterTime);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura

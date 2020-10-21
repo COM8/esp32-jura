@@ -120,19 +120,13 @@ void CoffeeMaker::brew_custom_coffee(const std::chrono::milliseconds grindTime, 
 
     // Brew step 1:
     std::cout << "Custom coffee brewing...\n";
-    write_and_wait(JURA_COFFEE_WATER_HEATER_ON);
     write_and_wait(JURA_COFFEE_WATER_PUMP_ON);
     std::this_thread::sleep_for(std::chrono::milliseconds{2000});
     write_and_wait(JURA_COFFEE_WATER_PUMP_OFF);
-    write_and_wait(JURA_COFFEE_WATER_HEATER_OFF);
     std::this_thread::sleep_for(std::chrono::milliseconds{2000});
 
     // Brew setp 2:
-    write_and_wait(JURA_COFFEE_WATER_HEATER_ON);
-    write_and_wait(JURA_COFFEE_WATER_PUMP_ON);
-    std::this_thread::sleep_for(waterTime);
-    write_and_wait(JURA_COFFEE_WATER_PUMP_OFF);
-    write_and_wait(JURA_COFFEE_WATER_HEATER_OFF);
+    pump_hot_water(waterTime);
 
     // Reset:
     std::cout << "Custom coffee finishing up...\n";
@@ -144,6 +138,17 @@ bool CoffeeMaker::write_and_wait(const std::string s) {
     connection.flush_read_buffer();
     connection.write_decoded(s);
     return connection.wait_for_ok();
+}
+
+void CoffeeMaker::pump_hot_water(const std::chrono::milliseconds waterTime) {
+    write_and_wait(JURA_COFFEE_WATER_PUMP_ON);
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now() + waterTime;
+    while (std::chrono::steady_clock::now() < end) {
+        write_and_wait(JURA_COFFEE_WATER_HEATER_ON);
+        std::this_thread::sleep_for(waterTime / 6);
+        write_and_wait(JURA_COFFEE_WATER_HEATER_OFF);
+    }
+    write_and_wait(JURA_COFFEE_WATER_PUMP_OFF);
 }
 
 //---------------------------------------------------------------------------
