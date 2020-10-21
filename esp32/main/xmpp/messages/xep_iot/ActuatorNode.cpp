@@ -15,7 +15,6 @@ void ActuatorNode::gen_actuator_node(tinyxml2::XMLDocument& doc, const xmpp::Jid
     tinyxml2::XMLElement* itemNode = helpers::PubSubHelper::gen_publish_item_node(doc, from, XMPP_IOT_ACTUATORS.c_str(), id.c_str());
     tinyxml2::XMLElement* valNode = doc.NewElement("val");
     valNode->SetAttribute("xmlns", iot_ns.c_str());
-    valNode->SetAttribute("type", fieldType.c_str());
     valNode->SetText(get_value_str().c_str());
     itemNode->InsertEndChild(valNode);
 }
