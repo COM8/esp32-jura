@@ -10,6 +10,9 @@ Type SliderNode::get_type() const { return Type::SliderNodeType; }
 
 void SliderNode::to_ui_field(tinyxml2::XMLDocument& doc, tinyxml2::XMLElement* xNode) const {
     tinyxml2::XMLElement* node = gen_field_node(doc, nullptr, title.c_str());
+    node->SetAttribute("min", min);
+    node->SetAttribute("max", max);
+    node->SetAttribute("steps", steps);
     xNode->InsertEndChild(node);
 }
 
@@ -19,12 +22,6 @@ bool SliderNode::on_value_changed(const tinyxml2::XMLElement* valNode) {
     value = valNode->DoubleText();
     return false;
 }
-
-void SliderNode::on_gen_val_node(tinyxml2::XMLElement* valNode) const {
-    valNode->SetAttribute("min", min);
-    valNode->SetAttribute("max", max);
-    valNode->SetAttribute("steps", steps);
-};
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::messages::xep_iot
 //---------------------------------------------------------------------------

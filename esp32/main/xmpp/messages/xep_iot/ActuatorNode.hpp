@@ -19,7 +19,6 @@ class ActuatorNode : public AbstractNode {
 
    protected:
     NodeType get_node_type() const override;
-    virtual void on_gen_val_node(tinyxml2::XMLElement* valNode) const;
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::messages::xep_iot

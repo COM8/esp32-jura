@@ -25,7 +25,6 @@ class SliderNode : public ActuatorNode {
    protected:
     Type get_type() const override;
     void to_ui_field(tinyxml2::XMLDocument& doc, tinyxml2::XMLElement* xNode) const override;
-    void on_gen_val_node(tinyxml2::XMLElement* valNode) const override;
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::messages::xep_iot
