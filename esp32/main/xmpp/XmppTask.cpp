@@ -56,7 +56,7 @@ void XmppTask::init() {
     add_button("xmpp.iot.actuator.coffee", "Coffee");
     add_button("xmpp.iot.actuator.espresso", "Espresso");
     add_button("xmpp.iot.actuator.cappuccino", "Cappuccino");
-    add_button("xmpp.iot.actuator.mild_foam", "Milk foam");
+    add_button("xmpp.iot.actuator.milk_foam", "Milk foam");
     add_button("xmpp.iot.actuator.caffe_barista", "Caffe Barista");
     add_button("xmpp.iot.actuator.lungo_barista", "Lungo Barista");
     add_button("xmpp.iot.actuator.espresso_doppio", "Espresso doppio");
