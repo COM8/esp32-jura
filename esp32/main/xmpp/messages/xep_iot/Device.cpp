@@ -1,5 +1,6 @@
 #include "Device.hpp"
 
+#include <algorithm>
 #include <iostream>
 
 #include "xmpp/XmppUtils.hpp"
@@ -123,30 +124,31 @@ void Device::event(messages::Message& event) {
     if (!elem) {
         return;
     }
-    std::vector<std::string> nodes;
+    std::unordered_set<std::string> nodes;
     for (const tinyxml2::XMLElement* e = elem->FirstChildElement("item"); e != nullptr; e = e->NextSiblingElement("item")) {
         const char* val = e->Attribute("node");
         if (val) {
-            nodes.push_back(std::string(val));
+            nodes.insert(std::string(val));
         }
     }
 
-    // Publish nodes anyway.
-    // Don't care if they exist:
-
     // Prepare nodes:
-    delete_node(XMPP_IOT_UI);
-    create_node(XMPP_IOT_UI);
-    subscribe_to_node(XMPP_IOT_UI);
-    delete_node(ActuatorNode::XMPP_IOT_ACTUATORS);
-    create_node(ActuatorNode::XMPP_IOT_ACTUATORS);
-    subscribe_to_node(ActuatorNode::XMPP_IOT_ACTUATORS);
-    delete_node(SensorNode::XMPP_IOT_SENSORS);
-    create_node(SensorNode::XMPP_IOT_SENSORS);
-    subscribe_to_node(SensorNode::XMPP_IOT_SENSORS);
+    create_subscribe_iot_node(XMPP_IOT_UI, nodes);
+    create_subscribe_iot_node(ActuatorNode::XMPP_IOT_ACTUATORS, nodes);
+    create_subscribe_iot_node(SensorNode::XMPP_IOT_SENSORS, nodes);
 
     // Publish node values:
     publish_nodes();
+}
+
+void Device::create_subscribe_iot_node(const std::string& nodeName, const std::unordered_set<std::string>& discoNodeSet) {
+    if (discoNodeSet.find(nodeName) == discoNodeSet.end()) {
+        // delete_node(nodeName);
+        create_node(nodeName);
+    } else {
+        std::cout << "Node: " << nodeName << " already published. Just subscribing.\n";
+    }
+    subscribe_to_node(nodeName);
 }
 
 void Device::delete_node(const std::string& nodeName) {
@@ -266,9 +268,11 @@ tinyxml2::XMLElement* Device::gen_node_config(tinyxml2::XMLDocument& doc) {
 
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "FORM_TYPE", "hidden", "http://jabber.org/protocol/pubsub#node_config", nullptr));
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#persist_items", nullptr, "true", nullptr));
+    xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#max_items", nullptr, "30", nullptr));
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#access_model", nullptr, "open", nullptr));   // Perhaps replace with "presence"
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#publish_model", nullptr, "open", nullptr));  // Perhaps replace with "subscribers"
     xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#notification_type", nullptr, "normal", nullptr));
+    xNode->InsertEndChild(helpers::PubSubHelper::gen_field_node(doc, "pubsub#deliver_payloads", nullptr, "true", nullptr));
 
     return xNode;
 }

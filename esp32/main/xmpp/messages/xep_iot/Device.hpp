@@ -3,6 +3,7 @@
 #include <tinyxml2.h>
 
 #include <memory>
+#include <unordered_set>
 #include <vector>
 
 #include "AbstractNode.hpp"
@@ -35,6 +36,7 @@ class Device : public INonConstEventListener<messages::Message> {
     void publish_node(const std::unique_ptr<AbstractNode>& node);
     void publish_node(const ActuatorNode* node);
     void publish_node(const SensorNode* node);
+    void create_subscribe_iot_node(const std::string& nodeName, const std::unordered_set<std::string>& discoNodeSet);
 
     void discover_nodes();
     void request_node_configuration(const std::string& nodeName);
