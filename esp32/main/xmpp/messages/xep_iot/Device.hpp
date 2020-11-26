@@ -27,6 +27,15 @@ class Device : public INonConstEventListener<messages::Message> {
     Device(std::shared_ptr<xmpp::XmppClient> client);
 
     void add_node(std::unique_ptr<AbstractNode>&& node);
+    template <typename T>
+    T* get_node(const std::string& id) const {
+        for (const std::unique_ptr<AbstractNode>& node : nodes) {
+            if (node->get_id() == id) {
+                return static_cast<T*>(node.get());
+            }
+        }
+        return nullptr;
+    }
     void init();
 
     void publish_nodes();

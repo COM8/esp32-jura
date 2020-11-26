@@ -21,6 +21,7 @@ class SliderNode : public ActuatorNode {
 
     const std::string get_value_str() const override;
     bool on_value_changed(const tinyxml2::XMLElement* valNode) override;
+    double get_value() const;
 
    protected:
     Type get_type() const override;

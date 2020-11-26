@@ -8,6 +8,8 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <chrono>
+#include <cmath>
 
 #include "xmpp/Jid.hpp"
 #include "xmpp/XmppAccount.hpp"
@@ -26,30 +28,30 @@ const std::string INITIAL_HELLO_MESSAGE = "Hi from the ESP32. Please mirror this
 
 const std::string ID_SENSOR_TEXT_GENERAL = "xmpp.iot.sensor.text.general";
 const std::string ID_SENSOR_TEXT_CUSTOM = "xmpp.iot.sensor.text.custom";
-const std::string ID_SENSOR_TEXT_WATER = "xmpp.iot.sensor.text.water";
-const std::string ID_SENSOR_TEXT_BEANS = "xmpp.iot.sensor.text.beans";
+const std::string ID_ACTUATOR_SLIDER_WATER = "xmpp.iot.actuator.slider.water";
+const std::string ID_ACTUATOR_SLIDER_BEANS = "xmpp.iot.actuator.slider.beans";
 const std::string ID_SENSOR_TEXT_INFO = "xmpp.iot.sensor.text.info";
 const std::string ID_SENSOR_TEXT_MACHINE = "xmpp.iot.sensor.text.machine";
 const std::string ID_SENSOR_TEXT_STATUS = "xmpp.iot.sensor.text.status";
 
-const std::string ID_ACTUATOR_COFFEE = "xmpp.iot.actuator.coffee";
-const std::string ID_ACTUATOR_ESPRESSO = "xmpp.iot.actuator.espresso";
-const std::string ID_ACTUATOR_CAPPUCCINO = "xmpp.iot.actuator.cappuccino";
-const std::string ID_ACTUATOR_MILK_FOAM = "xmpp.iot.actuator.milk_foam";
-const std::string ID_ACTUATOR_CAFFE_BARISTA = "xmpp.iot.actuator.caffe_barista";
-const std::string ID_ACTUATOR_LUNGO_BARISTA = "xmpp.iot.actuator.lungo_barista";
-const std::string ID_ACTUATOR_ESPRESSO_DOPPIO = "xmpp.iot.actuator.espresso_doppio";
-const std::string ID_ACTUATOR_MACCIATO = "xmpp.iot.actuator.macciato";
-const std::string ID_ACTUATOR_BREW = "xmpp.iot.actuator.brew";
+const std::string ID_ACTUATOR_BUTTON_COFFEE = "xmpp.iot.actuator.button.coffee";
+const std::string ID_ACTUATOR_BUTTON_ESPRESSO = "xmpp.iot.actuator.button.espresso";
+const std::string ID_ACTUATOR_BUTTON_CAPPUCCINO = "xmpp.iot.actuator.button.cappuccino";
+const std::string ID_ACTUATOR_BUTTON_MILK_FOAM = "xmpp.iot.actuator.button.milk_foam";
+const std::string ID_ACTUATOR_BUTTON_CAFFE_BARISTA = "xmpp.iot.actuator.button.caffe_barista";
+const std::string ID_ACTUATOR_BUTTON_LUNGO_BARISTA = "xmpp.iot.actuator.button.lungo_barista";
+const std::string ID_ACTUATOR_BUTTON_ESPRESSO_DOPPIO = "xmpp.iot.actuator.button.espresso_doppio";
+const std::string ID_ACTUATOR_BUTTON_MACCIATO = "xmpp.iot.actuator.button.macciato";
+const std::string ID_ACTUATOR_BUTTON_BREW = "xmpp.iot.actuator.button.brew";
 
-const std::unordered_map<std::string, jura::CoffeeMaker::coffee_t> ID_TYPE_MAP{{ID_ACTUATOR_COFFEE, jura::CoffeeMaker::coffee_t::COFFEE},
-                                                                               {ID_ACTUATOR_ESPRESSO, jura::CoffeeMaker::coffee_t::ESPRESSO},
-                                                                               {ID_ACTUATOR_CAPPUCCINO, jura::CoffeeMaker::coffee_t::CAPPUCCINO},
-                                                                               {ID_ACTUATOR_MILK_FOAM, jura::CoffeeMaker::coffee_t::MILK_FOAM},
-                                                                               {ID_ACTUATOR_CAFFE_BARISTA, jura::CoffeeMaker::coffee_t::CAFFE_BARISTA},
-                                                                               {ID_ACTUATOR_LUNGO_BARISTA, jura::CoffeeMaker::coffee_t::LUNGO_BARISTA},
-                                                                               {ID_ACTUATOR_ESPRESSO_DOPPIO, jura::CoffeeMaker::coffee_t::ESPRESSO_DOPPIO},
-                                                                               {ID_ACTUATOR_MACCIATO, jura::CoffeeMaker::coffee_t::MACCHIATO}};
+const std::unordered_map<std::string, jura::CoffeeMaker::coffee_t> ID_TYPE_MAP{{ID_ACTUATOR_BUTTON_COFFEE, jura::CoffeeMaker::coffee_t::COFFEE},
+                                                                               {ID_ACTUATOR_BUTTON_ESPRESSO, jura::CoffeeMaker::coffee_t::ESPRESSO},
+                                                                               {ID_ACTUATOR_BUTTON_CAPPUCCINO, jura::CoffeeMaker::coffee_t::CAPPUCCINO},
+                                                                               {ID_ACTUATOR_BUTTON_MILK_FOAM, jura::CoffeeMaker::coffee_t::MILK_FOAM},
+                                                                               {ID_ACTUATOR_BUTTON_CAFFE_BARISTA, jura::CoffeeMaker::coffee_t::CAFFE_BARISTA},
+                                                                               {ID_ACTUATOR_BUTTON_LUNGO_BARISTA, jura::CoffeeMaker::coffee_t::LUNGO_BARISTA},
+                                                                               {ID_ACTUATOR_BUTTON_ESPRESSO_DOPPIO, jura::CoffeeMaker::coffee_t::ESPRESSO_DOPPIO},
+                                                                               {ID_ACTUATOR_BUTTON_MACCIATO, jura::CoffeeMaker::coffee_t::MACCHIATO}};
 
 XmppTask::XmppTask(std::shared_ptr<esp::Storage> storage)
     : Task("XMPP Task", 4096, smooth::core::APPLICATION_BASE_PRIO, std::chrono::seconds(3), 1),
@@ -81,25 +83,25 @@ void XmppTask::init() {
     // IoT-Device:
     iotDevice = std::make_unique<messages::xep_iot::Device>(client);
     add_header(ID_SENSOR_TEXT_GENERAL, "General:");
-    add_button(ID_ACTUATOR_COFFEE, "Coffee");
-    add_button(ID_ACTUATOR_ESPRESSO, "Espresso");
-    add_button(ID_ACTUATOR_CAPPUCCINO, "Cappuccino");
-    add_button(ID_ACTUATOR_MILK_FOAM, "Milk foam");
-    add_button(ID_ACTUATOR_CAFFE_BARISTA, "Caffe Barista");
-    add_button(ID_ACTUATOR_LUNGO_BARISTA, "Lungo Barista");
-    add_button(ID_ACTUATOR_ESPRESSO_DOPPIO, "Espresso doppio");
-    add_button(ID_ACTUATOR_MACCIATO, "Macciato");
+    add_button(ID_ACTUATOR_BUTTON_COFFEE, "Coffee");
+    add_button(ID_ACTUATOR_BUTTON_ESPRESSO, "Espresso");
+    add_button(ID_ACTUATOR_BUTTON_CAPPUCCINO, "Cappuccino");
+    add_button(ID_ACTUATOR_BUTTON_MILK_FOAM, "Milk foam");
+    add_button(ID_ACTUATOR_BUTTON_CAFFE_BARISTA, "Caffe Barista");
+    add_button(ID_ACTUATOR_BUTTON_LUNGO_BARISTA, "Lungo Barista");
+    add_button(ID_ACTUATOR_BUTTON_ESPRESSO_DOPPIO, "Espresso doppio");
+    add_button(ID_ACTUATOR_BUTTON_MACCIATO, "Macciato");
     add_header(ID_SENSOR_TEXT_CUSTOM, "Custom:");
-    add_slider(ID_SENSOR_TEXT_WATER, "Water:", 0, 200, 100, 1);
-    add_slider(ID_SENSOR_TEXT_BEANS, "Beans:", 0, 200, 100, 1);
-    add_button(ID_ACTUATOR_BREW, "Brew");
+    add_slider(ID_ACTUATOR_SLIDER_WATER, "Water:", 0, 200, 100, 1);
+    add_slider(ID_ACTUATOR_SLIDER_BEANS, "Beans:", 0, 200, 100, 1);
+    add_button(ID_ACTUATOR_BUTTON_BREW, "Brew");
     add_header(ID_SENSOR_TEXT_INFO, "Info:");
     add_text_single(ID_SENSOR_TEXT_MACHINE, "Machine:", "Jura E6", true);
     add_text_single(ID_SENSOR_TEXT_STATUS, "Status:", "ready", true);
 }
 
 void XmppTask::add_button(const std::string& id, std::string&& label) {
-    std::function<void(const std::string&)> fp = std::bind(&XmppTask::onButtonPressed, this, std::placeholders::_1);
+    std::function<void(const std::string&)> fp = std::bind(&XmppTask::on_button_pressed, this, std::placeholders::_1);
     std::unique_ptr<messages::xep_iot::ButtonNode> button = std::make_unique<messages::xep_iot::ButtonNode>(std::string(id), std::move(label), std::move(fp));
     iotDevice->add_node(std::move(button));
 }
@@ -216,10 +218,17 @@ void XmppTask::event(messages::Message& event) {
     }
 }
 
-void XmppTask::onButtonPressed(const std::string& id) {
+void XmppTask::on_button_pressed(const std::string& id) {
     std::cout << "Button '" << id << "' pressed.\n";
-    if (id == ID_ACTUATOR_BREW) {
-        coffeeMaker.brew_custom_coffee();
+    if (id == ID_ACTUATOR_BUTTON_BREW) {
+        messages::xep_iot::SliderNode* waterNode = iotDevice->get_node<messages::xep_iot::SliderNode>(ID_ACTUATOR_SLIDER_WATER);
+        assert(waterNode);
+        int waterTime = static_cast<int>(std::round(40000.0 * (waterNode->get_value() / 100.0)));
+
+        messages::xep_iot::SliderNode* beansNode = iotDevice->get_node<messages::xep_iot::SliderNode>(ID_ACTUATOR_SLIDER_BEANS);
+        assert(beansNode);
+        int grindTime = static_cast<int>(std::round(3600.0 * (beansNode->get_value() / 100.0)));
+        coffeeMaker.brew_custom_coffee(std::chrono::milliseconds(waterTime), std::chrono::milliseconds(grindTime));
     } else {
         coffeeMaker.brew_coffee(ID_TYPE_MAP.at(id));
     }

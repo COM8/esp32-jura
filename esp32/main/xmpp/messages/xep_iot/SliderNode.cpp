@@ -18,6 +18,8 @@ void SliderNode::to_ui_field(tinyxml2::XMLDocument& doc, tinyxml2::XMLElement* x
 
 const std::string SliderNode::get_value_str() const { return std::to_string(value); }
 
+double SliderNode::get_value() const { return value; }
+
 bool SliderNode::on_value_changed(const tinyxml2::XMLElement* valNode) {
     value = valNode->DoubleText();
     return false;
