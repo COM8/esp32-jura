@@ -66,7 +66,8 @@ void XmppTask::init() {
     add_slider("xmpp.iot.sensor.text.beans", "Beans:", 0, 200, 100, 1);
     add_button("xmpp.iot.actuator.brew", "Brew");
     add_header("xmpp.iot.sensor.text.info", "Info:");
-    add_text_single("xmpp.iot.sensor.text.machine", "Machine:", "TUM Jutta E6", true);
+    add_text_single("xmpp.iot.sensor.text.machine", "Machine:", "Jura E6", true);
+    add_text_single("xmpp.iot.sensor.text.status", "Status:", "ready", true);
 }
 
 void XmppTask::add_button(std::string&& id, std::string&& label) {

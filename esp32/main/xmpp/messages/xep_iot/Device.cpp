@@ -105,7 +105,7 @@ void Device::gen_ui_node(tinyxml2::XMLDocument& doc) {
     itemNode->InsertEndChild(xNode);
 
     tinyxml2::XMLElement* titleNode = doc.NewElement("title");
-    titleNode->SetText("JURA E6 Coffee Maker");
+    titleNode->SetText("Jutta E6 Coffee Maker");
     xNode->InsertEndChild(titleNode);
 
     // Add nodes:
