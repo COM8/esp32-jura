@@ -31,8 +31,6 @@ class XmppTask : public smooth::core::Task,
     std::shared_ptr<xmpp::XmppClient> client;
     std::unique_ptr<messages::xep_iot::Device> iotDevice;
 
-    static const std::string INITIAL_HELLO_MESSAGE;
-
     jura::CoffeeMaker coffeeMaker{};
 
    public:
@@ -52,10 +50,12 @@ class XmppTask : public smooth::core::Task,
     void onReady();
     void handleIoTMessageMessage(const char* msg);
 
-    void add_button(std::string&& id, std::string&& label);
-    void add_text_single(std::string&& id, std::string&& label, std::string&& text, bool readonly);
-    void add_header(std::string&& id, std::string&& text);
-    void add_slider(std::string&& id, std::string&& label, double min, double max, double value, double steps);
+    void add_button(const std::string& id, std::string&& label);
+    void add_text_single(const std::string& id, std::string&& label, std::string&& text, bool readonly);
+    void add_header(const std::string& id, std::string&& text);
+    void add_slider(const std::string& id, std::string&& label, double min, double max, double value, double steps);
+
+    void onButtonPressed(const std::string& id);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp

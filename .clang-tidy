@@ -18,7 +18,8 @@ Checks: '*,
 -llvm-include-order,
 -cppcoreguidelines-non-private-member-variables-in-classes,
 -cppcoreguidelines-pro-type-vararg,
--hicpp-vararg
+-hicpp-vararg,
+-llvmlibc-callee-namespace
 '
 WarningsAsErrors: '*'
 HeaderFilterRegex: 'src/*.hpp'
