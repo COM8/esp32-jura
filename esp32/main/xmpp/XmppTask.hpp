@@ -56,7 +56,7 @@ class XmppTask : public smooth::core::Task,
     void add_slider(const std::string& id, std::string&& label, double min, double max, double value, double steps);
 
     void on_button_pressed(const std::string& id);
-    void update_status(const std::string& msg);
+    void update_status(std::string&& msg);
 };
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp

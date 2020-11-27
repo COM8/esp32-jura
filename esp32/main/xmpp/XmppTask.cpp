@@ -234,7 +234,7 @@ void XmppTask::on_button_pressed(const std::string& id) {
         int waterTime = static_cast<int>(std::round(40000.0 * (waterNode->get_value() / 100.0)));
         
         update_status("Brewing a custom coffee with [" + std::to_string(grindTime) + ", " + std::to_string(waterTime) + "].");
-        coffeeMaker.brew_custom_coffee(std::chrono::milliseconds(waterTime), std::chrono::milliseconds(grindTime));
+        coffeeMaker.brew_custom_coffee(std::chrono::milliseconds(grindTime), std::chrono::milliseconds(waterTime));
         update_status("Brewing custom coffee done. Enjoy!");
     } else {
         update_status("Brewing: " + id);
@@ -243,8 +243,12 @@ void XmppTask::on_button_pressed(const std::string& id) {
     }
 }
 
-void XmppTask::update_status(const std::string& msg) {
+void XmppTask::update_status(std::string&& msg) {
     std::cout << msg << '\n';
+
+    messages::xep_iot::TextSingleNode* statusNode = iotDevice->get_node<messages::xep_iot::TextSingleNode>(ID_SENSOR_TEXT_STATUS);
+    statusNode->set_text(std::move(msg));
+    iotDevice->publish_node(statusNode);
 }
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp

@@ -16,6 +16,7 @@ class TextSingleNode : public SensorNode {
     ~TextSingleNode() override = default;
 
     bool on_value_changed(const tinyxml2::XMLElement* valNode) override;
+    void set_text(std::string&& text);
 
    protected:
     virtual Type get_type() const override;

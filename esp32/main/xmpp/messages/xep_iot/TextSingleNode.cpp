@@ -22,6 +22,8 @@ bool TextSingleNode::on_value_changed(const tinyxml2::XMLElement* valNode) {
     text = std::string{valNode->GetText()};
     return false;
 }
+
+void TextSingleNode::set_text(std::string&& text) { this->text = std::move(text); }
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::xmpp::messages::xep_iot
 //---------------------------------------------------------------------------
