@@ -41,10 +41,14 @@ void CoffeeMaker::switch_page(size_t pageNum) {
 }
 
 void CoffeeMaker::brew_coffee(coffee_t coffee) {
+    assert(!locked);
+    locked = true;
+
     size_t pageNum = get_page_num(coffee);
     switch_page(pageNum);
     jura_button_t button = get_button_num(coffee);
     press_button(button);
+    locked = false;
 }
 
 size_t CoffeeMaker::get_page_num(coffee_t coffee) {
@@ -103,6 +107,9 @@ void CoffeeMaker::press_button(jura_button_t button) {
 }
 
 void CoffeeMaker::brew_custom_coffee(const std::chrono::milliseconds grindTime, const std::chrono::milliseconds waterTime) {
+    assert(!locked);
+    locked = true;
+
     std::cout << "Brewing custom coffee with " << std::to_string(grindTime.count()) << " ms grind time and " << std::to_string(waterTime.count()) << " ms water time...\n";
 
     // Grind:
@@ -132,6 +139,8 @@ void CoffeeMaker::brew_custom_coffee(const std::chrono::milliseconds grindTime, 
     std::cout << "Custom coffee finishing up...\n";
     write_and_wait(JURA_BREW_GROUP_RESET);
     std::cout << "Custom coffee done.\n";
+
+    locked = false;
 }
 
 bool CoffeeMaker::write_and_wait(const std::string s) {
@@ -153,6 +162,8 @@ void CoffeeMaker::pump_hot_water(const std::chrono::milliseconds waterTime) {
     }
     write_and_wait(JURA_COFFEE_WATER_PUMP_OFF);
 }
+
+bool CoffeeMaker::is_locked() const { return locked; }
 
 //---------------------------------------------------------------------------
 }  // namespace esp32jura::jura

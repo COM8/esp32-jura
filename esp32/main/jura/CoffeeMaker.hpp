@@ -50,6 +50,11 @@ class CoffeeMaker {
      **/
     size_t pageNum{0};
 
+    /**
+     * True in case we are currently making a something like a cup of coffee. 
+     **/
+    bool locked{false};
+
    public:
     JuraConnection connection;
 
@@ -85,6 +90,11 @@ class CoffeeMaker {
      * Simulates a button press of the given button.
      **/
     void press_button(jura_button_t button);
+
+    /**
+     * Returns true in case the coffee maker is locked due to it currently interacting with the coffee maker e.g. brewing a coffee.
+     **/
+    bool is_locked() const;
 
    private:
     /**
