@@ -57,7 +57,7 @@ class Esp32Jura : public smooth::core::Application {
     utils::SerialJuraBridgeTask bridge{};
 #endif  // MODE_BRIDGE
 #ifdef MODE_SERIAL
-    serial::SerialConnectionTask serialConnection{};
+    esp::serial::SerialConnectionTask serialConnection{};
 #endif  // MODE_SERIAL
 #ifdef MODE_XMPP
     std::shared_ptr<esp::actuator::RgbLed> rgbLed{};
