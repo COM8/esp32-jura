@@ -1,4 +1,7 @@
 # ESP32 JURA
+
+## The work from this repository has been continued here: https://github.com/Jutta-Proto/protocol-cpp
+
 This project aims to control newer JURA coffee maker models with an ESP32 and a new [XMPP-IoT](https://github.com/COM8/esp32-xmpp-iot) extension as reference implementation.
 Therefore we need to understand how the protocol for controlling JURA coffee makers works.
 
